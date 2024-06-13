@@ -12,7 +12,9 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 import "./src/database.js";
 import User from "./src/models/User.js";
 import { typeDefs, resolvers } from "./src/graphql/index.js";
+import { PubSub } from 'graphql-subscriptions';
 
+const pubsub = new PubSub()
 
 const { JWT_SECRET, PORT } = process.env
 
@@ -73,6 +75,7 @@ app.use(
 
           return {
             currentUser,
+            pubsub,
           }
 
         } catch (error) {
