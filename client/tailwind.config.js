@@ -12,6 +12,21 @@ export default {
   theme: {
     extend: {},
   },
-  plugins: [nextui()],
+  plugins: [nextui({
+    addCommonColors: true,
+    defaultTheme: 'light',
+    themes: {
+      light: {
+        colors: {
+          background: 'white',
+        }
+      },
+      dark: {
+        colors: {
+          background: '#15202B',
+        }
+      }
+    }
+  })],
 }
 

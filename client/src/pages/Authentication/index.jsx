@@ -1,9 +1,11 @@
+import DarkmodeToggle from "../../components/DarkmodeToggle"
 
 
 const Authentication = () => {
   return (
-    <div>
-      auth
+    <div className="dark">
+      AUTH
+      <DarkmodeToggle />
     </div>
   )
 }
