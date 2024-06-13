@@ -1,7 +1,9 @@
-import User from "../../models/User.js"
 import bcrypt from "bcrypt"
+import User from "../../models/User.js"
+import Followship from "../../models/Followship.js";
 import { generateToken } from "../../utils/generateToken.js";
 import { generateSlug } from "../../utils/generateSlug.js"
+
 export const UserResolvers = {
   Query: {
     user: async (_, { slug }, context) => {
@@ -34,18 +36,16 @@ export const UserResolvers = {
       try {
         const user = context.currentUser
 
-        // const followingQuery = await Followship.find({
-        //   follower: user.id
-        // })
-        // .select('following')
+        const followingQuery = await Followship.find({
+          follower: user.id
+        })
+          .select('following')
 
-        // const followingList = followingQuery.map(user => user.following)
-
-        //TODO: ADD FOLLOWING LIST
+        const followingList = followingQuery.map(user => user.following)
 
         return {
           user,
-          followingList: []
+          followingList
         }
       } catch (error) {
         throw new Error(error.message)
