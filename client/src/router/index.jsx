@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "@pages/Home";
-import Authentication from "@pages/Authentication";
+import Home from "@/pages/Home";
+import Authentication from "@/pages/Authentication";
+
 
 export const router = createBrowserRouter([
   {
@@ -8,16 +9,13 @@ export const router = createBrowserRouter([
     element: <Authentication />
   },
   {
-    path: '/home',
-    element: <Home />
+    path: '/',
+
+    children: [
+      {
+        index: true,
+        element: <Home />,
+      }
+    ]
   }
 ])
-
-// export const router = createBrowserRouter(
-//   createRoutesFromElements(
-//     <Routes path='/auth' element={<></>}>
-//       <Route index element={<Authentication />} />
-//       <Route path="home" element={<Home />} />
-//     </Routes>
-//   )
-// )
