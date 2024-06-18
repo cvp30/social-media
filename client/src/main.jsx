@@ -8,6 +8,7 @@ import { setContext } from '@apollo/client/link/context'
 import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
 import { createClient } from 'graphql-ws'
 import { getMainDefinition } from '@apollo/client/utilities'
+import { AuthContextProvider } from './contexts/AuthContext'
 
 
 const httpLink = createHttpLink({
@@ -51,7 +52,9 @@ const client = new ApolloClient({
 ReactDOM.createRoot(document.getElementById('root')).render(
   <NextUIProvider>
     <ApolloProvider client={client}>
-      <RouterProvider router={router} />
+      <AuthContextProvider>
+        <RouterProvider router={router} />
+      </AuthContextProvider>
     </ApolloProvider>
   </NextUIProvider>,
 )

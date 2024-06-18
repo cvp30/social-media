@@ -14,15 +14,21 @@ export const UserTypeDefs = `#graphql
     location: String
   }
 
-  type UserSession {
-    user: User!
-    token: String!
-  }
-
   type UserInfo {
     user: User!
     followingList: [ID!]!
   }
+
+  type RegisterResponse {
+    token: String!
+    userInfo: UserInfo!
+  }
+
+  type LoginResponse {
+    token: String!
+    userInfo: UserInfo!
+  }
+
 
   input UserInputData {
     username: String
@@ -49,12 +55,12 @@ export const UserTypeDefs = `#graphql
       email: String!
       username: String!
       password: String!
-    ): UserSession!
+    ): RegisterResponse!
 
     loginUser(
       email: String!
       password: String!
-    ): UserSession!
+    ): LoginResponse!
 
     updateUser(
       userInputData: UserInputData

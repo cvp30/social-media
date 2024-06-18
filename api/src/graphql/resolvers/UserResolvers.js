@@ -98,18 +98,21 @@ export const UserResolvers = {
 
         const match = await bcrypt.compare(password, userFound.password)
 
+        const followingQuery = await Followship.find({
+          follower: userFound.id
+        })
+          .select('following')
+
+        const followingList = followingQuery.map(user => user.following)
+
         if (!match) throw new Error("Incorrect password!")
 
         const token = generateToken(userFound)
 
         return {
-          user: {
-            id: userFound._id,
-            email: userFound.email,
-            username: userFound.username,
-            slug: userFound.slug,
-            photoURL: userFound.photoURL,
-            state: userFound.state,
+          userInfo: {
+            user: userFound,
+            followingList
           },
           token,
         }
@@ -136,18 +139,14 @@ export const UserResolvers = {
           slug
         })
 
-        const res = await newUser.save()
+        await newUser.save()
 
-        const token = generateToken(res)
+        const token = generateToken(newUser)
 
         return {
-          user: {
-            id: res._id,
-            email: res.email,
-            username: res.username,
-            slug: res.slug,
-            photoURL: res.photoURL,
-            state: res.state,
+          userInfo: {
+            user: newUser,
+            followingList: [],
           },
           token,
         }
@@ -156,7 +155,7 @@ export const UserResolvers = {
       }
 
     },
-    registerUser: async (_, { userInputData }) => {
+    updateUser: async (_, { userInputData }) => {
       if (!context.currentUser) throw new Error('Not Authenticated')
 
       try {

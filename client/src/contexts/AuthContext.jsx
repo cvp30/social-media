@@ -1,18 +1,23 @@
+import { GET_PROFILE } from '@/graphql/GetProfile'
+import { useApolloClient, useLazyQuery, useQuery } from '@apollo/client'
 import PropTypes from 'prop-types'
-import { createContext, useContext } from "react"
+import { createContext, useContext, useState } from "react"
 
 const AuthUserContext = createContext()
 
 
 export const AuthContextProvider = ({ children }) => {
 
-  // const [isSignIn, setIsSignIn] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(!!localStorage.getItem('Session'))
 
+  const { data, loading } = useQuery(GET_PROFILE)
 
   return (
     <AuthUserContext.Provider value={{
-      // isSignIn,
-      // setIsSignIn
+      isAuthenticated,
+      setIsAuthenticated,
+      currUser: data?.userProfile.user,
+      loading
     }}>
       {children}
     </AuthUserContext.Provider>
