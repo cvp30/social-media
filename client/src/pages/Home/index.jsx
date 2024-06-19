@@ -2,8 +2,8 @@
 
 const Home = () => {
   return (
-    <div>
-      HOME
+    <div className="grow h-[40rem]">
+
     </div>
   )
 }

@@ -7,7 +7,7 @@ import { loginSchema } from "../schemas/loginSchema"
 import ErrorMessage from "./ErrorMessage"
 import { useMutation } from "@apollo/client"
 import { LOGIN_USER } from "../graphql/LoginMutation"
-import { Navigate, useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import { AuthContext } from "@/contexts/AuthContext"
 import { GET_PROFILE } from "@/graphql/GetProfile"
 import toast from "react-hot-toast"
@@ -16,7 +16,7 @@ const LoginForm = () => {
 
   const navigate = useNavigate()
   const [isVisible, setIsVisible] = useState(false)
-  const { isAuthenticated, setIsAuthenticated } = AuthContext()
+  const { setIsAuthenticated } = AuthContext()
 
   const [loginUser, { loading }] = useMutation(LOGIN_USER, {
     onCompleted: () => {
@@ -59,8 +59,6 @@ const LoginForm = () => {
     }
   })
 
-  if (isAuthenticated) return <Navigate to='/' />
-
   return (
     <form
       onSubmit={loginFormik.handleSubmit}
@@ -101,7 +99,6 @@ const LoginForm = () => {
         size="lg"
         color="primary"
         radius="sm"
-        // disabled={loading}
         isLoading={loading}
       >
         <p className="font-bold">

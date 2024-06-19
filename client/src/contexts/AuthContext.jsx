@@ -1,10 +1,9 @@
 import { GET_PROFILE } from '@/graphql/GetProfile'
-import { useApolloClient, useLazyQuery, useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import PropTypes from 'prop-types'
 import { createContext, useContext, useState } from "react"
 
 const AuthUserContext = createContext()
-
 
 export const AuthContextProvider = ({ children }) => {
 
