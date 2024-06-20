@@ -3,9 +3,14 @@
 @tailwind utilities;
 
 @layer components {
+
+  html,
   body {
     letter-spacing: 0.02rem;
+    /* font-size: 15.5px; */
   }
+
+
 }
 
 @layer base {

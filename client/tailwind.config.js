@@ -14,6 +14,9 @@ export default {
       fontFamily: {
         'sans': ['Roboto', 'sans-serif'],
       },
+      spacing: {
+        '148': '37rem',
+      }
     },
   },
   plugins: [nextui({
@@ -36,6 +39,7 @@ export default {
             DEFAULT: '#377DFF',
           },
           background: '#15202B',
+          foreground: 'white',
         }
       }
     }

@@ -5,7 +5,6 @@ const DarkmodeToggle = () => {
 
   const { isDarkMode, onChangeTheme } = useTheme()
 
-
   return (
     <button onClick={onChangeTheme}>
       {isDarkMode ? <Moon /> : <Sun />}

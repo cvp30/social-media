@@ -7,7 +7,7 @@ import { useFormik } from "formik"
 import { useMutation } from "@apollo/client"
 import { useNavigate } from "react-router-dom"
 import { REGISTER_USER } from "../graphql/RegisterMutation"
-import { AuthContext } from "@/contexts/AuthContext"
+// import { AuthContext } from "@/contexts/AuthContext"
 import toast from "react-hot-toast"
 import { GET_PROFILE } from "@/graphql/GetProfile"
 
@@ -15,11 +15,11 @@ const RegisterForm = () => {
 
   const navigate = useNavigate()
   const [isVisible, setIsVisible] = useState(false)
-  const { setIsAuthenticated } = AuthContext()
+  // const { setIsAuthenticated } = AuthContext()
 
   const [registerUser, { loading }] = useMutation(REGISTER_USER, {
     onCompleted: () => {
-      setIsAuthenticated(true)
+      // setIsAuthenticated(true)
       navigate('/')
 
     },

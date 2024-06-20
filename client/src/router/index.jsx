@@ -1,7 +1,8 @@
 import { createBrowserRouter } from "react-router-dom";
-import Home from "@/pages/Home";
 import Authentication from "@/pages/Authentication";
-import { Sidebar } from '@/layouts'
+import MainPageLayout from "@/layouts/MainPageLayout";
+import { AuthContextProvider } from "@/contexts/AuthContext";
+import Home from "@/pages/Home";
 import Messages from "@/pages/Messages";
 import Community from "@/pages/Community";
 import Notification from "@/pages/Notification";
@@ -15,7 +16,7 @@ export const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <Sidebar />,
+    element: <AuthContextProvider> <MainPageLayout /> </AuthContextProvider>,
     children: [
       {
         index: true,

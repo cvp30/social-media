@@ -4,7 +4,7 @@ import LoginForm from "./components/LoginForm"
 import { Modal, useDisclosure } from "@nextui-org/react"
 import RegisterForm from "./components/RegisterForm"
 import { XCircleIcon } from "@heroicons/react/24/solid"
-import { AuthContext } from "@/contexts/AuthContext"
+// import { AuthContext } from "@/contexts/AuthContext"
 import { Navigate } from "react-router-dom"
 import { Toaster } from "react-hot-toast"
 
@@ -12,8 +12,8 @@ const Authentication = () => {
 
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-
-  const { isAuthenticated } = AuthContext()
+  const isAuthenticated = localStorage.getItem('Session')
+  // const { isAuthenticated } = AuthContext()
 
   if (isAuthenticated) return <Navigate to='/' />
 
