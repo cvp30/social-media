@@ -1,20 +1,19 @@
-import DarkmodeToggle from "@/components/DarkmodeToggle"
 import UserCardDropdown from "@/components/UserCardDropdown"
 import { menuItems } from "@/utils/MenuItems"
 import { AuthContext } from "@/contexts/AuthContext"
 import { NavLink } from "react-router-dom"
+import Logo from "@/components/Logo"
+
+
 
 const Sidebar = () => {
   const { currUser } = AuthContext()
 
   return (
-    <nav className="fixed h-screen py-2 w-28 xl:w-64 flex flex-col justify-between">
+    <nav className="fixed h-screen py-2 w-28 xl:w-72 flex flex-col justify-between">
 
       {/* LOGO  */}
-      <div className="w-full h-20 bg-[silver]">
-        Logo
-        <DarkmodeToggle />
-      </div>
+      <Logo />
 
       {/* ITEMS */}
       <div className="w-full h-fit flex flex-col items-center justify-between gap-2 px-4">

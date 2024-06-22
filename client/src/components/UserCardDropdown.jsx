@@ -1,10 +1,21 @@
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, User } from "@nextui-org/react"
 import { AuthContext } from '@/contexts/AuthContext';
+import { useTheme } from "@/hooks/useTheme";
+import { useApolloClient } from "@apollo/client";
+import { useNavigate } from "react-router-dom";
 
 const UserCardDropdown = () => {
 
+  const navigate = useNavigate()
+  const client = useApolloClient()
   const { currUser } = AuthContext()
+  const { isDarkMode, onChangeTheme } = useTheme()
 
+  const handleSignOut = async () => {
+    localStorage.removeItem("Session")
+    client.resetStore()
+    navigate('/auth')
+  }
 
   return (
     <Dropdown
@@ -37,12 +48,14 @@ const UserCardDropdown = () => {
       >
         <DropdownItem
           key="theme"
+          onClick={onChangeTheme}
           // startContent={<Settings />}
           title={<p className="text-base">Theme</p>}
           textValue="desc"
         />
         <DropdownItem
           key="logout"
+          onClick={handleSignOut}
           // startContent={<Settings />}
           title={<p className="text-base">Log Out</p>}
           textValue="desc"

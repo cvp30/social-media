@@ -4,6 +4,7 @@ import { menuItems } from "@/utils/MenuItems";
 import { AuthContext } from "@/contexts/AuthContext";
 import { NavLink } from "react-router-dom";
 import UserCardDropdown from "@/components/UserCardDropdown";
+import Logo from "@/components/Logo";
 
 const NavigationBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,17 +15,12 @@ const NavigationBar = () => {
       isMenuOpen={isMenuOpen}
       onMenuOpenChange={setIsMenuOpen}
       maxWidth="full"
-      className="h-16 fixed"
+      className="h-20 fixed"
     >
-      <NavbarContent justify="start">
+      <NavbarContent className="flex gap-0" justify="start">
         <NavbarMenuToggle aria-label={isMenuOpen ? "Close menu" : "Open menu"} />
-      </NavbarContent>
-
-      <NavbarContent className="pr-3" justify="center">
         <NavbarBrand>
-          <div className="w-28 h-full bg-[silver]">
-            Logo
-          </div>
+          <Logo />
         </NavbarBrand>
       </NavbarContent>
 

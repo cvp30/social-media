@@ -7,7 +7,7 @@ const RecomendedUser = () => {
   const { currUser } = AuthContext()
 
   return (
-    <div className="w-full xl:w3/4 flex flex-col gap-2">
+    <div className="w-80 border border-divider rounded-xl flex flex-col gap-2">
       <div className="cursor-pointer flex items-center py-2 px-3">
         <UserInfoCard
           username={currUser.username}

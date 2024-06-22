@@ -1,7 +1,7 @@
 
 const Community = () => {
   return (
-    <div>
+    <div className="w-full bg-[green]">
       community
     </div>
   )

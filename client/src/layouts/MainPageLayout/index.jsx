@@ -19,14 +19,14 @@ const MainPageLayout = () => {
   )
 
   return (
-    <div className="w-full h-full max-w-screen-2xl flex flex-col md:flex-row md:justify-center items-center md:items-start mx-auto border">
+    <div className="w-full h-full max-w-screen-2xl flex flex-col md:flex-row items-center md:items-start mx-auto border">
       <div className="hidden md:block">
         <Sidebar />
       </div>
       <div className="w-full h-fit md:hidden">
         <NavigationBar />
       </div>
-      <div className="h-fit mt-16 md:mt-0 md:ml-28 xl:ml-64 lg:flex-1">
+      <div className="h-fit mt-16 md:mt-0 md:ml-28 xl:ml-72 lg:flex-1">
         <Outlet />
       </div>
     </div>
