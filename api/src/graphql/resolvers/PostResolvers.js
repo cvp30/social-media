@@ -1,5 +1,6 @@
 import Post from "../../models/Post.js"
 import User from "../../models/User.js"
+import Followship from "../../models/Followship.js"
 import { POST_ADDED } from "../../utils/subscriptionEvents.js"
 
 export const PostResolvers = {
@@ -10,6 +11,31 @@ export const PostResolvers = {
       try {
         return await Post.find({
           parentPostId: null
+        })
+          .populate("author")
+          .sort({ createdAt: -1 })
+      } catch (error) {
+        throw new Error(error.message)
+      }
+    },
+    allFollowingUserPost: async (_, __, { currentUser }) => {
+      if (!currentUser) throw new Error('Not Authenticated')
+
+      try {
+        const userId = currentUser.id
+
+        const followingQuery = await Followship.find({
+          follower: userId
+        })
+          .select('following')
+
+        const followingList = followingQuery.map(user => user.following)
+
+        return await Post.find({
+          $and: [
+            { parentPostId: null },
+            { author: { $in: followingList } }
+          ],
         })
           .populate("author")
           .sort({ createdAt: -1 })
@@ -87,9 +113,10 @@ export const PostResolvers = {
       if (!currentUser) throw new AuthenticationError('Not Authenticated')
 
       try {
+        console.log(postId)
         const postDeleted = await Post.deleteOne({ _id: postId })
 
-        if (postDeleted.acknowledged) throw new Error("Post not Found!")
+        if (!postDeleted.deletedCount) throw new Error("Post not Found!")
 
         return postId
 

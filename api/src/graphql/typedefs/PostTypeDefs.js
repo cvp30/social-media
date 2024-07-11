@@ -2,11 +2,12 @@
 export const PostTypeDefs = `#graphql
   scalar Date
 
-  type Author {
+  type Author implements UserBasicData {
     id: ID!
-    slug: String!
-    email: String!
     photoURL: String
+    username: String!
+    slug: String!
+    bio: String
   }
 
   type Post {
@@ -18,11 +19,11 @@ export const PostTypeDefs = `#graphql
     createdAt: Date!
     likes: [ID!]!
     shares: [ID!]!
-    views: [ID!]!
   }
 
   extend type Query {
     allPosts: [Post!]!
+    allFollowingUserPost: [Post!]!
     post(
       postId: ID!
     ): Post!
