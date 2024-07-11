@@ -1,10 +1,10 @@
 export const FollowshipTypedefs = `#graphql
   scalar Date
 
-  type UserOutput {
+  type UserOutput implements UserBasicData {
     id: ID!
-    username: String
     photoURL: String
+    username: String!
     slug: String!
     bio: String
   }

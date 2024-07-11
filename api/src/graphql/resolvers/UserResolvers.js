@@ -6,8 +6,8 @@ import { generateSlug } from "../../utils/generateSlug.js"
 
 export const UserResolvers = {
   Query: {
-    user: async (_, { slug }, context) => {
-      if (!context.currentUser) throw new Error('Not Authenticated')
+    user: async (_, { slug }, { currentUser }) => {
+      if (!currentUser) throw new Error('Not Authenticated')
       try {
         const user = await User.findOne({ slug })
 
@@ -17,10 +17,10 @@ export const UserResolvers = {
         throw new Error(error.message)
       }
     },
-    allUsers: async (_, __, context) => {
-      if (!context.currentUser) throw new Error('Not Authenticated')
+    allUsers: async (_, __, { currentUser }) => {
+      if (!currentUser) throw new Error('Not Authenticated')
       try {
-        const userId = context.currentUser.id
+        const userId = currentUser.id
 
         return await User.find({
           _id: { $ne: userId }
@@ -29,12 +29,51 @@ export const UserResolvers = {
         throw new Error(error.message)
       }
     },
-
-    userProfile: async (_, __, context) => {
-      if (!context.currentUser) throw new Error('Not Authenticated')
+    searchUsers: async (_, { user }, { currentUser }) => {
+      if (!currentUser) throw new Error('Not Authenticated')
 
       try {
-        const user = context.currentUser
+        const userId = currentUser.id
+
+        return await User.find({
+          _id: { $ne: userId },
+          $or: [
+            {
+              username: { $regex: user, $options: 'i' }
+            },
+            {
+              slug: { $regex: user, $options: 'i' }
+            }
+          ]
+        })
+      } catch (error) {
+        throw new Error(error.message)
+      }
+    },
+    communityUsers: async (_, __, { currentUser }) => {
+      if (!currentUser) throw new Error('Not Authenticated')
+      try {
+        const userId = currentUser.id
+
+        const followingQuery = await Followship.find({
+          follower: userId
+        })
+          .select('following')
+
+        const followingList = followingQuery.map(user => user.following)
+
+        return await User.find({
+          _id: { $nin: [...followingList, userId] }
+        })
+      } catch (error) {
+        throw new Error(error.message)
+      }
+    },
+    userProfile: async (_, __, { currentUser }) => {
+      if (!currentUser) throw new Error('Not Authenticated')
+
+      try {
+        const user = currentUser
 
         const followingQuery = await Followship.find({
           follower: user.id
@@ -52,11 +91,11 @@ export const UserResolvers = {
       }
 
     },
-    randomUser: async (_, __, context) => {
-      if (!context.currentUser) throw new Error('Not Authenticated')
+    randomUser: async (_, __, { currentUser }) => {
+      if (!currentUser) throw new Error('Not Authenticated')
       try {
         const randomUsersSize = 1
-        const userId = context.currentUser.id
+        const userId = currentUser.id
 
         const randomUsers = await User.aggregate([
           {

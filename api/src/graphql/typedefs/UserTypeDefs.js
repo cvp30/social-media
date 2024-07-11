@@ -1,16 +1,25 @@
 
 export const UserTypeDefs = `#graphql
-  type User {
+
+  interface UserBasicData{
     id: ID!
-    email: String!
+    photoURL: String
     username: String!
     slug: String!
+    bio: String
+  }
+
+  type User implements UserBasicData {
+    id: ID!
     photoURL: String
+    username: String!
+    slug: String!
+    bio: String
+    email: String!
     coverPhoto: String
     github: String
     linkedin: String
     portfolio: String
-    bio: String
     location: String
   }
 
@@ -47,6 +56,10 @@ export const UserTypeDefs = `#graphql
     ): User!
     userProfile: UserInfo!
     allUsers: [User!]!
+    searchUsers(
+      user: String!
+    ): [User!]!
+    communityUsers: [User!]!
     randomUser: User!
   }
 
