@@ -10,46 +10,51 @@ const Sidebar = () => {
   const { currUser } = AuthContext()
 
   return (
-    <nav className="fixed h-screen py-2 w-28 xl:w-72 flex flex-col justify-between">
+    <nav className="fixed h-screen py-4 w-28 xl:w-72 flex flex-col justify-between border-r-1 border-divider">
 
-      {/* LOGO  */}
-      <Logo />
+      <div className="w-full h-fit">
 
-      {/* ITEMS */}
-      <div className="w-full h-fit flex flex-col items-center justify-between gap-2 px-4">
-        {
-          menuItems.map((item) => {
-            const path = item.name === 'home' ?
-              ''
-              : item.name === 'profile' ?
-                currUser.slug : item.name
-            return (
-              <NavLink
-                key={item.name}
-                to={`/${path}`}
-                className={({ isActive }) => `${isActive ? 'bg-default-200' : ''} w-fit xl:w-full h-fit p-3 hover:bg-default-200 rounded-small flex items-center gap-4 capitalize`}
-              >
-                {
-                  ({ isActive }) => (
-                    <>
-                      <span className="size-7">
-                        {
-                          isActive ?
-                            <item.boldIcon /> : <item.icon />
-                        }
-                      </span>
-                      <p className={`${isActive ? 'font-bold' : 'font-normal'} text-xl hidden xl:block`}>
-                        {item.name}
-                      </p>
-                    </>
-                  )
-                }
+        {/* LOGO  */}
+        <Logo />
 
-              </NavLink>
-            )
-          })
-        }
+        {/* ITEMS */}
+        <div className="w-full h-fit mt-8 flex flex-col items-center justify-between gap-2 px-4">
+          {
+            menuItems.map((item) => {
+              const path = item.name === 'home' ?
+                ''
+                : item.name === 'profile' ?
+                  currUser.slug : item.name
+              return (
+                <NavLink
+                  key={item.name}
+                  to={`/${path}`}
+                  className={({ isActive }) => `${isActive ? 'bg-hoverPost' : ''} w-fit xl:w-full h-fit p-3 hover:bg-hoverPost rounded-small flex items-center gap-4 capitalize`}
+                >
+                  {
+                    ({ isActive }) => (
+                      <>
+                        <span className="size-8">
+                          {
+                            isActive ?
+                              <item.boldIcon /> : <item.icon />
+                          }
+                        </span>
+                        <p className={`${isActive ? 'font-bold' : 'font-normal'} text-xl hidden xl:block`}>
+                          {item.name}
+                        </p>
+                      </>
+                    )
+                  }
+
+                </NavLink>
+              )
+            })
+          }
+        </div>
+
       </div>
+
 
       {/* USER CARD */}
       <div className="w-full h-fit px-7">

@@ -19,7 +19,7 @@ const MainPageLayout = () => {
   )
 
   return (
-    <div className="w-full h-full max-w-screen-2xl flex flex-col md:flex-row items-center md:items-start mx-auto border">
+    <div className="w-full h-full max-w-screen-2xl flex flex-col md:flex-row items-center md:items-start mx-auto">
       <div className="hidden md:block">
         <Sidebar />
       </div>

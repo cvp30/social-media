@@ -7,7 +7,14 @@
   html,
   body {
     letter-spacing: 0.02rem;
-    /* font-size: 15.5px; */
+    font-size: 15px;
+  }
+
+  html.dark {
+    background-color: #15202b;
+    background-image: linear-gradient(90deg, #15202b 0%, #000000 100%);
+    /* linear-gradient(251deg, #0d1210 0%, hsla(58.99, 100%, 23.33%, 0.02837051571513438) 65%), linear-gradient(295deg, #15202b 99%, #5acab1 100%); */
+    background-attachment: fixed;
   }
 
 

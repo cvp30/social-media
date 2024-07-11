@@ -52,9 +52,7 @@ const client = new ApolloClient({
 ReactDOM.createRoot(document.getElementById('root')).render(
   <NextUIProvider>
     <ApolloProvider client={client}>
-      {/* <AuthContextProvider> */}
       <RouterProvider router={router} />
-      {/* </AuthContextProvider> */}
     </ApolloProvider>
   </NextUIProvider>,
 )
