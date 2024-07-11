@@ -12,6 +12,7 @@ export const AuthContextProvider = ({ children }) => {
   return (
     <AuthUserContext.Provider value={{
       currUser: data?.userProfile.user,
+      followingList: data?.userProfile.followingList,
       loading
     }}>
       {children}

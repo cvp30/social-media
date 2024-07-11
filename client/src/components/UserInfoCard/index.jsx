@@ -1,5 +1,7 @@
 import PropTypes from 'prop-types';
 import { User } from "@nextui-org/react"
+import defaultUser from '@/assets/defaultUser.jpg'
+
 
 const UserInfoCard = ({ username, slug, photoURL }) => {
   return (
@@ -14,7 +16,7 @@ const UserInfoCard = ({ username, slug, photoURL }) => {
         wrapper: 'flex flex-col flex-1 overflow-hidden',
       }}
       avatarProps={{
-        src: `${photoURL}`,
+        src: `${photoURL || defaultUser}`,
       }}
     />
   )
