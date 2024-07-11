@@ -1,8 +1,10 @@
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, User } from "@nextui-org/react"
 import { AuthContext } from '@/contexts/AuthContext';
-import { useTheme } from "@/hooks/useTheme";
+// import { useTheme } from "@/hooks/useTheme";
 import { useApolloClient } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
+import { ArrowLeftStartOnRectangleIcon, MoonIcon, SunIcon } from "@heroicons/react/24/solid";
+import { useTheme } from "@/hooks/useTheme";
 
 const UserCardDropdown = () => {
 
@@ -49,14 +51,14 @@ const UserCardDropdown = () => {
         <DropdownItem
           key="theme"
           onClick={onChangeTheme}
-          // startContent={<Settings />}
-          title={<p className="text-base">Theme</p>}
+          endContent={isDarkMode ? <SunIcon className="size-6" /> : <MoonIcon className="size-6" />}
+          title={<p className="text-base">{isDarkMode ? 'Light ' : 'Dark'} Theme</p>}
           textValue="desc"
         />
         <DropdownItem
           key="logout"
           onClick={handleSignOut}
-          // startContent={<Settings />}
+          endContent={<ArrowLeftStartOnRectangleIcon className="size-6" />}
           title={<p className="text-base">Log Out</p>}
           textValue="desc"
           color="danger"
