@@ -8,6 +8,8 @@ import Community from "@/pages/Community";
 import Notification from "@/pages/Notification";
 import Profile from "@/pages/Profile";
 import Settings from "@/pages/Settings";
+import Post from "@/pages/Post";
+import ChatRoom from "@/pages/Messages/pages/ChatRoom";
 
 export const router = createBrowserRouter([
   {
@@ -27,8 +29,18 @@ export const router = createBrowserRouter([
         element: <Community />,
       },
       {
+        path: 'post/:postId',
+        element: <Post />,
+      },
+      {
         path: 'messages',
         element: <Messages />,
+        children: [
+          {
+            path: ':chatId',
+            element: <ChatRoom />,
+          },
+        ]
       },
       {
         path: 'notification',

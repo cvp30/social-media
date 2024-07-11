@@ -1,4 +1,3 @@
-import DarkmodeToggle from "@/components/DarkmodeToggle"
 import { GoogleButton } from "@/pages/Authentication/components/SocialButtons"
 import LoginForm from "./components/LoginForm"
 import { Modal, useDisclosure } from "@nextui-org/react"
@@ -23,7 +22,7 @@ const Authentication = () => {
         className="hidden lg:block lg:w-1/2 bg-[url('https://images.unsplash.com/photo-1546514714-df0ccc50d7bf?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=667&q=80')] bg-cover"
       ></div>
       <div className=" w-1/2 flex items-center relative">
-        <div className="absolute top-5 right-5"> <DarkmodeToggle /> </div>
+        {/* <div className="absolute top-5 right-5"> <DarkmodeToggle /> </div> */}
 
         <div className="shadow-medium rounded-md w-[26rem] h-fit flex flex-col items-center gap-3 p-2 mx-auto ">
           <h1>Hello Friend!</h1>
