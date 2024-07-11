@@ -31,7 +31,7 @@ export default {
           },
           background: 'white',
           foreground: '#27272a', // text
-
+          hoverPost: '#f1f5f9',
         }
       },
       dark: {
@@ -41,6 +41,7 @@ export default {
           },
           background: '#15202B',
           foreground: 'white',
+          hoverPost: '#1e293b',
         }
       }
     }
