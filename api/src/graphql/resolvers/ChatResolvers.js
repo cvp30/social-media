@@ -1,5 +1,8 @@
 import mongoose from "mongoose"
 import { Chat, Message } from "../../models/Chat.js"
+import { PubSub } from "graphql-subscriptions"
+
+const pubsub = new PubSub()
 
 export const ChatResolvers = {
   Query: {
@@ -39,7 +42,7 @@ export const ChatResolvers = {
           return (
             {
               id: chat.id,
-              users: chat.users.filter(user => user._id.toString() !== userId),
+              user: chat.users[0]._id.toString() === userId ? chat.users[1] : chat.users[0],
               ...generalData
             }
           )
@@ -73,8 +76,11 @@ export const ChatResolvers = {
 
         chatFound.users = chatFound.users.filter(user => user._id.toString() !== userId)
 
-        return chatFound
-
+        return {
+          id: chatFound._id,
+          user: chatFound.users[0]._id.toString() === userId ? chatFound.users[1] : chatFound.users[0],
+          messages: chatFound.messages,
+        }
       } catch (error) {
         throw new Error(error.message)
       }
@@ -82,19 +88,19 @@ export const ChatResolvers = {
   },
 
   Mutation: {
-    newChat: async (_, { users }, { currentUser }) => {
+    newChat: async (_, { user }, { currentUser }) => {
       if (!currentUser) throw new Error('User Not Authenticated')
 
       try {
         // GET THE ID OF THE LOGGED USER
         const userId = currentUser.id
+        if (!user) throw new Error('At least one user!')
 
-        if (!users.length) throw new Error('At least one user!')
+        // if (users.length > 1 && !groupName) throw new Error('need group name!')
 
         const chatFound = await Chat.findOne({
           users: {
-            $all: users,
-            $size: users.length + 1
+            $all: [user]
           }
         })
           .populate('users')
@@ -106,14 +112,37 @@ export const ChatResolvers = {
             }
           })
 
-        if (chatFound) return chatFound
+
+        if (chatFound) {
+          const aggregatedData = {}
+
+          if (chatFound.messages.length) {
+            const lastIdx = chatFound.messages.length - 1
+
+            aggregatedData.lastMessage = chatFound.messages[lastIdx].content
+            aggregatedData.messageDate = chatFound.messages[lastIdx].timestamp
+            aggregatedData.isSender = chatFound.messages[lastIdx].sender._id.toString() === userId.toString()
+            aggregatedData.unreadMessages = chatFound.messages.reduce((acc, msg) => acc + (!msg.isRead && msg.sender._id.toString() !== userId.toString() ? 1 : 0), 0)
+          }
+
+          return {
+            id: chatFound._id,
+            user: chatFound.users[0]._id.toString() === userId ? chatFound.users[1] : chatFound.users[0],
+            ...aggregatedData
+          }
+        }
 
         const newChat = await Chat.create({
-          users: [...users, userId],
+          users: [user, userId],
           messages: []
         })
 
-        return newChat.populate('users')
+        await newChat.populate('users')
+
+        return {
+          id: newChat._id,
+          user: newChat.users[0]._id.toString() === userId ? newChat.users[1] : newChat.users[0],
+        }
 
 
       } catch (error) {
@@ -147,7 +176,7 @@ export const ChatResolvers = {
       }
     },
 
-    newMessage: async (_, { chatId, message }, { currentUser, pubsub }) => {
+    newMessage: async (_, { chatId, message }, { currentUser }) => {
       if (!currentUser) throw new Error("User Not Authenticated!")
 
       try {
@@ -180,7 +209,7 @@ export const ChatResolvers = {
       }
     },
 
-    deleteMessage: async (_, { chatId, messageId }, { currentUser, pubsub }) => {
+    deleteMessage: async (_, { chatId, messageId }, { currentUser }) => {
       if (!currentUser) throw new Error("User Not Authenticated!")
 
       try {
@@ -207,10 +236,10 @@ export const ChatResolvers = {
 
   Subscription: {
     messageAdded: {
-      subscribe: (_, { chatId }, { pubsub }) => pubsub.asyncIterator([`MESSAGE_ADDED_${chatId}`])
+      subscribe: (_, { chatId }) => pubsub.asyncIterator([`MESSAGE_ADDED_${chatId}`])
     },
     messageRemoved: {
-      subscribe: (_, { chatId }, { pubsub }) => pubsub.asyncIterator([`MESSAGE_REMOVED_${chatId}`])
+      subscribe: (_, { chatId }) => pubsub.asyncIterator([`MESSAGE_REMOVED_${chatId}`])
     }
   }
 }

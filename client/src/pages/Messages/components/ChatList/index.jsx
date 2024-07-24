@@ -1,18 +1,20 @@
 import { AddMessage } from "@/icons"
 import { useQuery } from "@apollo/client"
 import { ScrollShadow, Spinner } from "@nextui-org/react"
-import { ALL_CHATS } from "../graphql/AllChats"
-import CustomInput from "@/components/CustomInput"
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid"
+import { useLocation } from "react-router-dom"
+import CustomInput from "@/components/CustomInput"
+import { ALL_CHATS } from "../../graphql/AllChats"
 import ChatCard from "./ChatCard"
-import NewMessageButton from "./NewMessageButton"
+import NewMessageButton from "../NewMessageButton"
 
 const ChatList = () => {
 
+  const location = useLocation()
   const { data, loading } = useQuery(ALL_CHATS)
 
   return (
-    <div className="w-96 h-full grid grid-cols-1 grid-rows-10 pt-3 border-r-1 border-divider">
+    <div className={`${location.pathname === '/messages' ? '' : 'hidden'} w-full lg:w-96 h-full lg:grid grid-cols-1 grid-rows-10 pt-3 border-r-1 border-divider`}>
       <div className="row-span-1 flex justify-between items-center px-4">
         <h3>Messages</h3>
 
@@ -50,7 +52,7 @@ const ChatList = () => {
                     <ChatCard
                       key={chat.id}
                       chatId={chat.id}
-                      users={chat.users} // array
+                      user={chat.user}
                       lastMessage={chat.lastMessage}
                       isSender={chat.isSender}
                       messageDate={chat.messageDate}

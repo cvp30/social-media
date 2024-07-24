@@ -50,14 +50,14 @@ const UserCardDropdown = () => {
       >
         <DropdownItem
           key="theme"
-          onClick={onChangeTheme}
+          onPress={onChangeTheme}
           endContent={isDarkMode ? <SunIcon className="size-6" /> : <MoonIcon className="size-6" />}
           title={<p className="text-base">{isDarkMode ? 'Light ' : 'Dark'} Theme</p>}
           textValue="desc"
         />
         <DropdownItem
           key="logout"
-          onClick={handleSignOut}
+          onPress={handleSignOut}
           endContent={<ArrowLeftStartOnRectangleIcon className="size-6" />}
           title={<p className="text-base">Log Out</p>}
           textValue="desc"

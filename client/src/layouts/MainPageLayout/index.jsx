@@ -26,7 +26,7 @@ const MainPageLayout = () => {
       <div className="w-full h-fit md:hidden">
         <NavigationBar />
       </div>
-      <div className="h-fit mt-16 md:mt-0 md:ml-28 xl:ml-72 lg:flex-1">
+      <div className="h-fit mt-20 md:mt-0 md:ml-28 xl:ml-72 w-full lg:flex-1">
         <Outlet />
       </div>
     </div>

@@ -6,7 +6,6 @@ import defaultUser from '@/assets/defaultUser.jpg'
 const UserInfoCard = ({ username, slug, photoURL }) => {
   return (
     <User
-      as="button"
       name={username}
       description={`@${slug}`}
       classNames={{
