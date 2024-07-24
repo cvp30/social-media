@@ -1,13 +1,13 @@
 import { gql } from "@apollo/client";
 
-export const ALL_CHATS = gql`
-  query AllChats{
-    allChats {
+export const CREATE_CHAT = gql`
+  mutation($user: ID!){
+    newChat(user: $user) {
       id
       user {
         id
-        photoURL
         username
+        photoURL
         slug
         bio
       }

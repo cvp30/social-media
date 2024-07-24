@@ -9,7 +9,7 @@ export const formatChatDate = (currDate) => {
   const date = dayjs(currDate)
 
   return date.isToday() ?
-    date.format('hh:mm A')
+    date.format('hh:mm a')
     :
     date.format('MMM D')
 }

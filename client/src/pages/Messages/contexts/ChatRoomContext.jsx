@@ -7,14 +7,16 @@ const ChatDataContext = createContext()
 
 export const ChatRoomContextProvider = ({ chatId, children }) => {
 
-  const { chat, loading: chatLoading } = useQuery(CHAT_INFO)
+  const { data, loading } = useQuery(CHAT_INFO, {
+    variables: { chatId }
+  })
 
   return (
     <ChatDataContext.Provider value={{
       chatId,
-      chat,
-      chatLoading,
-      isGroup: Boolean(chat?.users.length),
+      chat: data?.chat,
+      loading,
+      // isGroup: data?.chat.users.length > 1,
     }}>
       {children}
     </ChatDataContext.Provider>

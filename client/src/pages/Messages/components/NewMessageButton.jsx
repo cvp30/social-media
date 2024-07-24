@@ -1,30 +1,28 @@
 import PropTypes from 'prop-types';
-import { Button, Checkbox, CheckboxGroup, Divider, Modal, ModalBody, ModalContent, ModalHeader, ScrollShadow, Spinner, useDisclosure } from "@nextui-org/react"
+import { Button, Divider, Listbox, ListboxItem, Modal, ModalBody, ModalContent, ModalHeader, ScrollShadow, Spinner, useDisclosure } from "@nextui-org/react"
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import CustomInput from '@/components/CustomInput';
 import { useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { SEARCH_USERS } from '../graphql/SearchUsers';
 import UserInfoCard from '@/components/UserInfoCard';
-import UsersChip from './UsersChip';
+import { useCreateChat } from '../hooks/useCreateChat';
 
 const NewMessageButton = ({ children, ...props }) => {
 
   const [userInput, setUserInput] = useState('')
-  const [usersSelected, setUsersSelected] = useState([])
+  const [userSelected, setUserSelected] = useState(new Set([]))
   const { isOpen, onOpen, onClose, onOpenChange } = useDisclosure();
 
-  const [searchUsers, { data, loading }] = useLazyQuery(SEARCH_USERS, {
-    fetchPolicy: 'network-only'
-  })
-  // const [usersFound, setUsersFound] = useState(data?.searchUsers)
+  const { createChat, creatingChat } = useCreateChat()
+
+  const [searchUsers, { data, loading }] = useLazyQuery(SEARCH_USERS, { fetchPolicy: 'network-only' })
 
   const handleCloseModal = () => {
     setUserInput('')
-    setUsersSelected([])
-    // setUsersFound(null)
+    setUserSelected([])
   }
-  // console.log(usersFound)
+
   const handleChangeUserInput = (e) => setUserInput(e.target.value)
 
   const handleSubmitSearchUser = async (e) => {
@@ -41,7 +39,14 @@ const NewMessageButton = ({ children, ...props }) => {
   const handleSubmitCreateChat = async (e) => {
     e.preventDefault()
 
-    onClose()
+    if (Array.from(userSelected)[0]) {
+      const userIds = Array.from(userSelected)[0]
+
+      await createChat({
+        variables: { user: userIds }
+      })
+      onClose()
+    }
   }
 
   return (
@@ -85,8 +90,9 @@ const NewMessageButton = ({ children, ...props }) => {
                       radius='sm'
                       color="primary"
                       className="text-base font-bold"
+                      isLoading={creatingChat}
                     >
-                      Create
+                      Createe
                     </Button>
                   </div>
                 </ModalHeader>
@@ -103,10 +109,10 @@ const NewMessageButton = ({ children, ...props }) => {
                       />
                     </form>
 
-                    <UsersChip
+                    {/* <UsersChip
                       usersSelected={usersSelected}
                       setUsersSelected={setUsersSelected}
-                    />
+                    /> */}
 
                     <Divider />
 
@@ -120,38 +126,30 @@ const NewMessageButton = ({ children, ...props }) => {
                       loading ?
                         <Spinner />
                         : (
-                          <CheckboxGroup
-                            // label="create chat with:"
-                            value={usersSelected}
-                            onChange={setUsersSelected}
-                            radius="sm"
-                            className="p-0"
-                            classNames={{
-                              base: "w-full box-border",
-                              label: 'text-default-500'
+                          <Listbox
+                            selectionMode='single'
+                            selectedKeys={userSelected}
+                            onSelectionChange={setUserSelected}
+                            aria-label='userList'
+                            itemClasses={{
+                              base: 'data-[hover=true]:bg-hoverPost data-[selectable=true]:focus:bg-hoverPost',
                             }}
                           >
                             {
                               data?.searchUsers.map(user => (
-                                <Checkbox
+                                <ListboxItem
                                   key={user.id}
-                                  aria-label={user.username}
-                                  value={user}
-                                  size='lg'
-                                  className='hover:bg-hoverPost max-w-full px-5 py-5'
+                                  textValue={user.slug}
                                 >
                                   <UserInfoCard
-                                    key={user.id}
                                     slug={user.slug}
                                     username={user.username}
                                     photoURL={user.photoURL}
                                   />
-                                </Checkbox>
-
+                                </ListboxItem>
                               ))
                             }
-
-                          </CheckboxGroup>
+                          </Listbox>
 
                         )
                     }

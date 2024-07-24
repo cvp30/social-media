@@ -1,6 +1,7 @@
 import { Outlet, useLocation } from "react-router-dom"
-import ChatList from "./components/ChatList"
 import NewMessageButton from "./components/NewMessageButton"
+import { Toaster } from "react-hot-toast"
+import ChatList from "./components/ChatList"
 
 
 const Messages = () => {
@@ -8,16 +9,16 @@ const Messages = () => {
   const location = useLocation()
 
   return (
-    <div className="h-screen flex">
+    <div className="w-full md:h-screen h-[calc(100vh-5rem)] flex box-border">
+      <Toaster />
       <ChatList />
 
-      <div className="flex-1 grid grid-cols-1 grid-rows-10">
+      <div className="flex-1 grid grid-cols-1 grid-rows-7 border-divider border-r-1">
         {
           location.pathname === '/messages' ? (
-            <div className="row-span-10 flex flex-col justify-center items-center gap-6">
+            <div className="hidden lg:flex flex-col justify-center items-center row-span-7 gap-6">
               <h1>Select a message</h1>
               <p className="text-default-500">Choose from your existing conversations or just start a new one</p>
-
 
               <NewMessageButton
                 size="lg"

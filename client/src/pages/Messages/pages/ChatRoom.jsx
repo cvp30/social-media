@@ -1,5 +1,8 @@
 import { useParams } from "react-router-dom"
 import { ChatRoomContextProvider } from "../contexts/ChatRoomContext"
+import ChatRoomFooter from "../components/ChatRoomFooter"
+import ChatRoomBody from "../components/ChatRoomBody"
+import ChatRoomHeader from "../components/ChatRoomHeader"
 
 const ChatRoom = () => {
 
@@ -7,8 +10,9 @@ const ChatRoom = () => {
 
   return (
     <ChatRoomContextProvider chatId={chatId}>
-      <div className="w-full h-20 bg-[#ff00004a]">header</div>
-
+      <ChatRoomHeader />
+      <ChatRoomBody />
+      <ChatRoomFooter />
     </ChatRoomContextProvider>
   )
 }

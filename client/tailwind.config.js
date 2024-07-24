@@ -15,6 +15,7 @@ export default {
         'sans': ['Roboto', 'sans-serif'],
       },
       spacing: {
+        '100': '25rem',
         '148': '37rem',
         '164': '41rem',
       }
