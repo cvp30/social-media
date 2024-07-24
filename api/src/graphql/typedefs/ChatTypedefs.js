@@ -21,13 +21,13 @@ export const ChatTypedefs = `#graphql
 
   type Chat {
     id: ID!
-    users: [ChatUser!]!
+    user: ChatUser!
     messages: [Message!]!
   }
 
   type GeneralChat {
     id: ID!
-    users: [ChatUser!]!
+    user: ChatUser!
     lastMessage: String
     messageDate: Date
     isSender: Boolean
@@ -43,8 +43,8 @@ export const ChatTypedefs = `#graphql
 
   extend type Mutation {
     newChat(
-      users: [ID!]!
-    ): ChatUser!
+      user: ID!
+    ): GeneralChat!
     
     deleteChat(
       chatId: ID!
