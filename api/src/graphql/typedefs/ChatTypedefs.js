@@ -1,4 +1,3 @@
-
 export const ChatTypedefs = `#graphql
   scalar Date
 
@@ -28,9 +27,7 @@ export const ChatTypedefs = `#graphql
   type GeneralChat {
     id: ID!
     user: ChatUser!
-    lastMessage: String
-    messageDate: Date
-    isSender: Boolean
+    lastMessage: Message
     unreadMessages: Int
   }
 
@@ -56,7 +53,6 @@ export const ChatTypedefs = `#graphql
     ): Message!
 
     deleteMessage(
-      chatId: ID!
       messageId: ID!
     ): ID!
 
@@ -72,3 +68,8 @@ export const ChatTypedefs = `#graphql
     ): ID!
   }
 `
+
+// lastMessage: String
+//     messageDate: Date
+//     isSender: Boolean
+//     unreadMessages: Int

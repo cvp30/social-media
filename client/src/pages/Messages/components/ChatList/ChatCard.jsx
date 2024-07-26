@@ -4,10 +4,15 @@ import { NavLink } from "react-router-dom"
 import defaultUser from '@/assets/defaultUser.jpg'
 import { formatChatDate } from '@/utils/FormatChatDate';
 import { useMessageAdded } from '../../hooks/useMessageAdded';
+import { AuthContext } from '@/contexts/AuthContext';
 
-const ChatCard = ({ chatId, user, lastMessage, messageDate, isSender, unreadMessages }) => {
+const ChatCard = ({ chatId, user, lastMessage, unreadMessages }) => {
 
   useMessageAdded(chatId)
+
+  const { currUser } = AuthContext()
+
+  const isSender = lastMessage ? lastMessage.sender.id === currUser.id : null
 
   return (
     <NavLink
@@ -46,7 +51,7 @@ const ChatCard = ({ chatId, user, lastMessage, messageDate, isSender, unreadMess
                   {isSender ? 'you: ' : ''}
                 </span>
                 <span>
-                  {lastMessage}
+                  {lastMessage.content}
                 </span>
               </>
             )
@@ -56,9 +61,9 @@ const ChatCard = ({ chatId, user, lastMessage, messageDate, isSender, unreadMess
       </div>
 
       {
-        messageDate ? (
+        lastMessage?.timestamp ? (
           <div className='w-fit h-full pt-2'>
-            <p className='text-default-500 text-sm'> {formatChatDate(messageDate)} </p>
+            <p className='text-default-500 text-sm'> {formatChatDate(lastMessage.timestamp)} </p>
           </div>
 
         ) : <></>
@@ -73,8 +78,6 @@ export default ChatCard
 ChatCard.propTypes = {
   chatId: PropTypes.string,
   user: PropTypes.object,
-  lastMessage: PropTypes.string,
-  messageDate: PropTypes.string,
-  isSender: PropTypes.bool,
+  lastMessage: PropTypes.object,
   unreadMessages: PropTypes.number,
 }

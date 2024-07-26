@@ -10,10 +10,15 @@ export const ALL_CHATS = gql`
         username
         slug
         bio
+      } 
+      lastMessage {
+        id
+        content
+        sender {
+          id
+        }
+        timestamp  
       }
-      lastMessage
-      messageDate
-      isSender
       unreadMessages
     }
   }

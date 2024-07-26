@@ -92,7 +92,7 @@ const NewMessageButton = ({ children, ...props }) => {
                       className="text-base font-bold"
                       isLoading={creatingChat}
                     >
-                      Createe
+                      Create
                     </Button>
                   </div>
                 </ModalHeader>

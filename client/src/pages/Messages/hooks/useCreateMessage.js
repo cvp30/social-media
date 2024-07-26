@@ -6,7 +6,7 @@ import { ALL_CHATS } from "../graphql/AllChats"
 import { MESSAGE_FRAGMENT } from "../graphql/fragments/MessageFragment"
 
 
-export const useSendMessage = (chatId, message) => {
+export const useCreateMessage = (chatId, message) => {
 
   const { currUser } = AuthContext()
 
@@ -41,10 +41,15 @@ export const useSendMessage = (chatId, message) => {
           allChats: allChats.map(chat => {
             return chat.id === chatId ? {
               ...chat,
-              lastMessage: data.newMessage.content,
-              messageDate: data.newMessage.timestamp,
-              isSender: true,
-              unreadMessages: 0
+              lastMessage: {
+                id: data.newMessage.id,
+                content: data.newMessage.content,
+                sender: {
+                  id: data.newMessage.sender.id
+                },
+                timestamp: data.newMessage.timestamp,
+              },
+              unreadMessages: 0,
             }
               :
               chat

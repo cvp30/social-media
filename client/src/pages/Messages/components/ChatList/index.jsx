@@ -54,8 +54,6 @@ const ChatList = () => {
                       chatId={chat.id}
                       user={chat.user}
                       lastMessage={chat.lastMessage}
-                      isSender={chat.isSender}
-                      messageDate={chat.messageDate}
                       unreadMessages={chat.unreadMessages}
                     />
                   )

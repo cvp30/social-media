@@ -19,23 +19,26 @@ export const useMessageAdded = (chatId) => {
 
       if (messageAdded.sender.id !== currUser.id) {
         // UPDATE MESSAGE CHAT ----------------------------
-        const { chat } = cache.readQuery({
+        const chatInfo = cache.readQuery({
           query: CHAT_INFO,
           variables: { chatId }
         })
 
-        cache.modify({
-          id: cache.identify(chat),
-          fields: {
-            messages(existingMessageRefs = []) {
-              const newMsgRef = cache.writeFragment({
-                data: messageAdded,
-                fragment: MESSAGE_FRAGMENT
-              })
-              return [...existingMessageRefs, newMsgRef]
+        if (chatInfo) {
+          const { chat } = chatInfo
+          cache.modify({
+            id: cache.identify(chat),
+            fields: {
+              messages(existingMessageRefs = []) {
+                const newMsgRef = cache.writeFragment({
+                  data: messageAdded,
+                  fragment: MESSAGE_FRAGMENT
+                })
+                return [...existingMessageRefs, newMsgRef]
+              }
             }
-          }
-        })
+          })
+        }
 
         // UPDATE CHAT LIST -------------------------------
         const { allChats } = cache.readQuery({
@@ -48,10 +51,15 @@ export const useMessageAdded = (chatId) => {
             allChats: allChats.map(chatItem => {
               return chatItem.id === chatId ? {
                 ...chatItem,
-                lastMessage: messageAdded.content,
-                messageDate: messageAdded.timestamp,
-                isSender: false,
-                unreadMessages: 0
+                lastMessage: {
+                  id: messageAdded.id,
+                  content: messageAdded.content,
+                  sender: {
+                    id: messageAdded.sender.id
+                  },
+                  timestamp: messageAdded.timestamp,
+                },
+                unreadMessages: chatItem.unreadMessages + 1,
               }
                 :
                 chatItem

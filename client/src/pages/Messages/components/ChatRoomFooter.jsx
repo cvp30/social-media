@@ -3,13 +3,13 @@ import { PaperAirplaneIcon, PaperClipIcon } from "@heroicons/react/24/solid"
 import { Button } from "@nextui-org/react"
 import { useState } from "react"
 import { ChatRoomContext } from "../contexts/ChatRoomContext"
-import { useSendMessage } from "../hooks/useSendMessage"
+import { useCreateMessage } from "../hooks/useCreateMessage"
 
 const ChatRoomFooter = () => {
 
   const { chatId } = ChatRoomContext()
   const [message, setMessage] = useState('')
-  const { sendMessage, loading } = useSendMessage(chatId, message)
+  const { sendMessage, loading } = useCreateMessage(chatId, message)
 
   const isDisabled = loading || !message.trim().length
 

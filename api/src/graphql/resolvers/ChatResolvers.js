@@ -27,25 +27,30 @@ export const ChatResolvers = {
           })
 
         return chatsFound.map(chat => {
-          let generalData = {}
+
+          const generalChatInfo = {
+            id: chat.id,
+            user: chat.users[0]._id.toString() === userId ? chat.users[1] : chat.users[0]
+          }
+
 
           // AT LEAST ONE MESSAGE
           if (chat.messages.length) {
+
+            generalChatInfo.unreadMessages = chat.messages.reduce((acc, msg) => acc + (!msg.isRead && msg.sender._id.toString() !== userId.toString() ? 1 : 0), 0)
+
             const lastIdx = chat.messages.length - 1
 
-            generalData.lastMessage = chat.messages[lastIdx].content
-            generalData.messageDate = chat.messages[lastIdx].timestamp
-            generalData.isSender = chat.messages[lastIdx].sender._id.toString() === userId.toString()
-            generalData.unreadMessages = chat.messages.reduce((acc, msg) => acc + (!msg.isRead && msg.sender._id.toString() !== userId.toString() ? 1 : 0), 0)
+            generalChatInfo.lastMessage = {
+              id: chat.messages[lastIdx].id,
+              content: chat.messages[lastIdx].content,
+              sender: chat.messages[lastIdx].sender,
+              timestamp: chat.messages[lastIdx].timestamp,
+            }
           }
 
-          return (
-            {
-              id: chat.id,
-              user: chat.users[0]._id.toString() === userId ? chat.users[1] : chat.users[0],
-              ...generalData
-            }
-          )
+          return generalChatInfo
+
         })
 
       } catch (error) {
@@ -94,6 +99,7 @@ export const ChatResolvers = {
       try {
         // GET THE ID OF THE LOGGED USER
         const userId = currentUser.id
+
         if (!user) throw new Error('At least one user!')
 
         // if (users.length > 1 && !groupName) throw new Error('need group name!')
@@ -112,24 +118,27 @@ export const ChatResolvers = {
             }
           })
 
-
         if (chatFound) {
-          const aggregatedData = {}
 
-          if (chatFound.messages.length) {
-            const lastIdx = chatFound.messages.length - 1
-
-            aggregatedData.lastMessage = chatFound.messages[lastIdx].content
-            aggregatedData.messageDate = chatFound.messages[lastIdx].timestamp
-            aggregatedData.isSender = chatFound.messages[lastIdx].sender._id.toString() === userId.toString()
-            aggregatedData.unreadMessages = chatFound.messages.reduce((acc, msg) => acc + (!msg.isRead && msg.sender._id.toString() !== userId.toString() ? 1 : 0), 0)
-          }
-
-          return {
+          const generalChatInfo = {
             id: chatFound._id,
             user: chatFound.users[0]._id.toString() === userId ? chatFound.users[1] : chatFound.users[0],
-            ...aggregatedData
           }
+
+          if (chatFound.messages.length) {
+            generalChatInfo.unreadMessages = chatFound.messages.reduce((acc, msg) => acc + (!msg.isRead && msg.sender._id.toString() !== userId.toString() ? 1 : 0), 0)
+
+            const lastIdx = chatFound.messages.length - 1
+
+            generalChatInfo.lastMessage = {
+              id: chatFound.messages[lastIdx]._id,
+              content: chatFound.messages[lastIdx].content,
+              sender: chatFound.messages[lastIdx].sender,
+              timestamp: chatFound.messages[lastIdx].timestamp,
+            }
+          }
+          return generalChatInfo
+
         }
 
         const newChat = await Chat.create({
@@ -209,12 +218,14 @@ export const ChatResolvers = {
       }
     },
 
-    deleteMessage: async (_, { chatId, messageId }, { currentUser }) => {
+    deleteMessage: async (_, { messageId }, { currentUser }) => {
       if (!currentUser) throw new Error("User Not Authenticated!")
-
+      // TODO: CAMBIAR EL GENERALCHAT AGREGANDO LA STRUCT DE MESSAGE QUITANDO CAMPOS CHAT, ISREAD
       try {
         const deletedMsg = await Message.findByIdAndDelete(messageId)
         if (!deletedMsg) throw new Error("Message Not exist!")
+
+        const chatId = deletedMsg.chat
 
         const chatFound = await Chat.findByIdAndUpdate(
           chatId,
@@ -223,6 +234,13 @@ export const ChatResolvers = {
           }
         )
         if (!chatFound) throw new Error("Chat Not Exist!")
+
+        // const lastMessage = chatFound.messages[chatFound.messages.length - 1]
+        // const messageOutput = {
+        //   id: messageId,
+        //   isLastMessage: lastMessage,
+        // }
+
 
         pubsub.publish(`MESSAGE_REMOVED_${chatId}`, { messageRemoved: messageId })
 

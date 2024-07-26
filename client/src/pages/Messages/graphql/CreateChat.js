@@ -6,14 +6,19 @@ export const CREATE_CHAT = gql`
       id
       user {
         id
-        username
         photoURL
+        username
         slug
         bio
       }
-      lastMessage
-      messageDate
-      isSender
+      lastMessage {
+        id
+        content
+        sender {
+          id
+        }
+        timestamp  
+      }
       unreadMessages
     }
   }
