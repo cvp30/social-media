@@ -68,8 +68,3 @@ export const ChatTypedefs = `#graphql
     ): ID!
   }
 `
-
-// lastMessage: String
-//     messageDate: Date
-//     isSender: Boolean
-//     unreadMessages: Int

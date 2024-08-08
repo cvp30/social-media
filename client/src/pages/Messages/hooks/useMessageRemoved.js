@@ -1,4 +1,3 @@
-import { AuthContext } from "@/contexts/AuthContext"
 import { useSubscription } from "@apollo/client"
 import { MESSAGE_REMOVED } from "../graphql/subscriptions/MessageRemoved"
 import { CHAT_INFO } from "../graphql/ChatInfo"
@@ -7,32 +6,57 @@ import { ALL_CHATS } from "../graphql/AllChats"
 
 export const useMessageRemoved = (chatId) => {
 
-  const { currUser } = AuthContext()
-
   useSubscription(MESSAGE_REMOVED, {
     variables: { chatId },
 
     onData: ({ client: { cache }, data }) => {
 
-      // const {messageRemoved} = data.data
+      // UPDATE MESSAGES CHAT-------------------------------------------
+      const chatInfo = cache.readQuery({
+        query: CHAT_INFO,
+        variables: { chatId }
+      })
 
-      // const { allChats } = cache.readQuery({
-      //   query: ALL_CHATS
-      // })
+      const { messageRemoved } = data.data
 
-      // cache.writeQuery({
-      //   query: ALL_CHATS,
-      //   data: {
-      //     allChats: allChats.map(chatItem => {
-      //       return currUser.id
-      //     })
-      //   }
-      // })
+      const { allChats } = cache.readQuery({
+        query: ALL_CHATS,
+      })
 
-      // const {chat} = cache.readQuery({
-      //   query: CHAT_INFO,
-      //   variables: {chatId}
-      // })
+
+      if (chatInfo) {
+        const { chat } = chatInfo
+
+        cache.modify({
+          id: cache.identify(chat),
+          fields: {
+            messages(existingMessageRefs, { readField }) {
+
+              return existingMessageRefs.filter(
+                messageRef => messageRemoved !== readField('id', messageRef)
+              )
+            }
+          }
+        })
+      }
+
+      cache.writeQuery({
+        query: ALL_CHATS,
+        data: {
+          allChats: allChats.map(currChat => {
+            return currChat.id === chatId && currChat.lastMessage.id === messageRemoved ?
+              {
+                ...currChat,
+                lastMessage: {
+                  ...currChat.lastMessage,
+                  content: "message deleted"
+                }
+              }
+              :
+              currChat
+          })
+        }
+      })
     }
   })
 }

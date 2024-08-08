@@ -220,7 +220,7 @@ export const ChatResolvers = {
 
     deleteMessage: async (_, { messageId }, { currentUser }) => {
       if (!currentUser) throw new Error("User Not Authenticated!")
-      // TODO: CAMBIAR EL GENERALCHAT AGREGANDO LA STRUCT DE MESSAGE QUITANDO CAMPOS CHAT, ISREAD
+
       try {
         const deletedMsg = await Message.findByIdAndDelete(messageId)
         if (!deletedMsg) throw new Error("Message Not exist!")
@@ -234,13 +234,6 @@ export const ChatResolvers = {
           }
         )
         if (!chatFound) throw new Error("Chat Not Exist!")
-
-        // const lastMessage = chatFound.messages[chatFound.messages.length - 1]
-        // const messageOutput = {
-        //   id: messageId,
-        //   isLastMessage: lastMessage,
-        // }
-
 
         pubsub.publish(`MESSAGE_REMOVED_${chatId}`, { messageRemoved: messageId })
 

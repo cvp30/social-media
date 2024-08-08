@@ -5,10 +5,12 @@ import defaultUser from '@/assets/defaultUser.jpg'
 import { formatChatDate } from '@/utils/FormatChatDate';
 import { useMessageAdded } from '../../hooks/useMessageAdded';
 import { AuthContext } from '@/contexts/AuthContext';
+import { useMessageRemoved } from '../../hooks/useMessageRemoved';
 
 const ChatCard = ({ chatId, user, lastMessage, unreadMessages }) => {
 
   useMessageAdded(chatId)
+  useMessageRemoved(chatId)
 
   const { currUser } = AuthContext()
 

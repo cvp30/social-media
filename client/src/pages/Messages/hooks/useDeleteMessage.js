@@ -1,28 +1,15 @@
 import { useMutation } from "@apollo/client"
 import { DELETE_MESSAGE } from "../graphql/DeleteMessage"
-import { CHAT_INFO } from "../graphql/ChatInfo"
+import toast from "react-hot-toast"
 
-export const useDeleteMessage = (chatId) => {
+export const useDeleteMessage = () => {
 
   const [deleteMessage] = useMutation(DELETE_MESSAGE, {
-    update: (cache, { data }) => {
-      const { chat } = cache.readQuery({
-        query: CHAT_INFO,
-        variables: { chatId }
+    onError: (error) => {
+      toast.error(error.message, {
+        duration: 2000
       })
-
-      cache.modify({
-        id: cache.identify(chat),
-        fields: {
-          messages(existingMessageRefs, { readField }) {
-
-            return existingMessageRefs.filter(
-              messageRef => data.deleteMessage !== readField('id', messageRef)
-            )
-          }
-        }
-      })
-    }
+    },
   })
 
   return {

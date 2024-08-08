@@ -4,14 +4,12 @@ import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, 
 import defaultUser from '@/assets/defaultUser.jpg'
 import dayjs from 'dayjs';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
-import { ChatRoomContext } from '../../contexts/ChatRoomContext';
 import { useDeleteMessage } from '../../hooks/useDeleteMessage';
 
 const MessageCard = ({ id, content, sender, isRead, timestamp }) => {
 
   const { currUser } = AuthContext()
-  const { chatId } = ChatRoomContext()
-  const { deleteMessage } = useDeleteMessage(chatId)
+  const { deleteMessage } = useDeleteMessage()
   const isMyMessage = currUser.id === sender.id
 
   const generalDate = dayjs(timestamp).format('dddd, MMMM D, YYYY h:mm A')
@@ -20,7 +18,6 @@ const MessageCard = ({ id, content, sender, isRead, timestamp }) => {
   const handleDeleteMessage = async () => {
     await deleteMessage({
       variables: {
-        chatId,
         messageId: id
       }
     })
