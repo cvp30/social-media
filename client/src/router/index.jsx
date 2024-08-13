@@ -10,6 +10,10 @@ import Profile from "@/pages/Profile";
 import Settings from "@/pages/Settings";
 import Post from "@/pages/Post";
 import ChatRoom from "@/pages/Messages/pages/ChatRoom";
+import Posts from "@/pages/Profile/pages/Posts";
+import Replies from "@/pages/Profile/pages/Replies";
+import Bookmarks from "@/pages/Profile/pages/Bookmarks";
+import Likes from "@/pages/Profile/pages/Likes";
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +53,24 @@ export const router = createBrowserRouter([
       {
         path: ':slug',
         element: <Profile />,
+        children: [
+          {
+            index: true,
+            element: <Posts />,
+          },
+          {
+            path: 'replies',
+            element: <Replies />,
+          },
+          {
+            path: 'bookmarks',
+            element: <Bookmarks />,
+          },
+          {
+            path: 'likes',
+            element: <Likes />,
+          },
+        ]
       },
       {
         path: 'settings',
