@@ -1,12 +1,9 @@
 import {
   HomeIcon as HomeIconSolid,
   UserGroupIcon as UserGroupIconSolid,
-  ChatBubbleLeftEllipsisIcon as ChatBubbleLeftEllipsisIconSolid,
-  BellIcon as BellIconSolid,
-  UserIcon as UserIconSolid,
-  Cog6ToothIcon as Cog6ToothIconSolid
+  ChatBubbleLeftEllipsisIcon as ChatBubbleLeftEllipsisIconSolid, UserIcon as UserIconSolid
 } from "@heroicons/react/24/solid"
-import { HomeIcon, UserGroupIcon, ChatBubbleLeftEllipsisIcon, BellIcon, UserIcon, Cog6ToothIcon } from "@heroicons/react/24/outline"
+import { HomeIcon, UserGroupIcon, ChatBubbleLeftEllipsisIcon, UserIcon } from "@heroicons/react/24/outline"
 
 export const menuItems = [
   {
@@ -24,19 +21,19 @@ export const menuItems = [
     icon: ChatBubbleLeftEllipsisIcon,
     boldIcon: ChatBubbleLeftEllipsisIconSolid,
   },
-  {
-    name: 'notification',
-    icon: BellIcon,
-    boldIcon: BellIconSolid,
-  },
+  // {
+  //   name: 'notification',
+  //   icon: BellIcon,
+  //   boldIcon: BellIconSolid,
+  // },
   {
     name: 'profile',
     icon: UserIcon,
     boldIcon: UserIconSolid,
   },
-  {
-    name: 'settings',
-    icon: Cog6ToothIcon,
-    boldIcon: Cog6ToothIconSolid,
-  },
+  // {
+  //   name: 'settings',
+  //   icon: Cog6ToothIcon,
+  //   boldIcon: Cog6ToothIconSolid,
+  // },
 ]

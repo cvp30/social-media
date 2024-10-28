@@ -18,9 +18,9 @@ export const FollowshipTypedefs = `#graphql
   extend type Mutation {
     followUser(
       followUserId: ID!
-    ): UserOutput!
+    ): ID!
     unfollowUser(
       unfollowUserId: ID!
-    ): UserOutput!
+    ): ID!
   }
 `

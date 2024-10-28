@@ -1,52 +1,19 @@
+import PropTypes from 'prop-types'
 import { AuthContext } from "@/contexts/AuthContext"
 import { Avatar, Button, Image, Textarea } from "@nextui-org/react"
 import PhotoButton from "./PhotoButton"
-import FeelingButton from "./FeelingButton"
 import VideoButton from "./VideoButton"
-import { useFormik } from "formik"
 import { XMarkIcon } from "@heroicons/react/24/solid"
-import { postSchema } from "@/schemas/postSchema"
-import { useMutation } from "@apollo/client"
-import { CREATE_POST } from "@/graphql/CreatePost"
-import { uploadPostImages } from "@/services/firebase"
+import { usePostForm } from '@/hooks/usePostForm'
+import EmojiButton from '../EmojiButton'
 
-const PostForm = () => {
+const PostForm = ({ parentPostId, closeFn }) => {
   const { currUser } = AuthContext()
-  const [createPost] = useMutation(CREATE_POST)
 
-  const postFormik = useFormik({
-    initialValues: {
-      content: "",
-      images: [],
-    },
-    validationSchema: postSchema,
-    onSubmit: async (values, { resetForm }) => {
+  const { postFormik, removeImage } = usePostForm(parentPostId, closeFn)
 
-      const input = {}
-      if (values.content.length) input.content = values.content
-
-      if (values.images.length) {
-        try {
-          const arrImagesPromises = values.images.map(image => uploadPostImages(currUser.id, image))
-          const arrImages = await Promise.all(arrImagesPromises)
-          console.log(arrImages)
-          input.images = arrImages
-
-        } catch (error) {
-          throw new Error(error.message)
-        }
-      }
-
-      await createPost({
-        variables: input
-      })
-      resetForm()
-    }
-  })
-  const removeImage = (index) => {
-    const newArr = postFormik.values.images
-    newArr.splice(index, 1)
-    postFormik.setFieldValue('images', newArr)
+  const handleAddEmoji = (emoji) => {
+    postFormik.setFieldValue('content', postFormik.values.content + emoji.native)
   }
 
   return (
@@ -56,6 +23,7 @@ const PostForm = () => {
     >
       <Avatar
         src={`${currUser.photoURL}`}
+        showFallback
       />
       <div className="flex-1 flex flex-col gap-2">
         <Textarea
@@ -63,7 +31,7 @@ const PostForm = () => {
           name="content"
           minRows={1}
           maxRows={15}
-          placeholder="What's happening?"
+          placeholder="What would you like to say?"
           radius="lg"
           variant="bordered"
           value={postFormik.values.content}
@@ -109,7 +77,7 @@ const PostForm = () => {
         <div className="w-full h-fit flex justify-between">
           <div className="w-fit flex gap-1">
             <PhotoButton postFormik={postFormik} />
-            <FeelingButton />
+            <EmojiButton handleAddEmoji={handleAddEmoji} />
             <VideoButton />
           </div>
 
@@ -117,6 +85,7 @@ const PostForm = () => {
             color="primary"
             radius="sm"
             type="submit"
+            className='font-semibold'
             isDisabled={!!Object.keys(postFormik.errors).length}
           >
             Post
@@ -131,3 +100,8 @@ const PostForm = () => {
 }
 
 export default PostForm
+
+PostForm.propTypes = {
+  parentPostId: PropTypes.string,
+  closeFn: PropTypes.func,
+}

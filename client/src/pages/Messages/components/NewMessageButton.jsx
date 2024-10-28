@@ -1,12 +1,13 @@
 import PropTypes from 'prop-types';
-import { Button, Divider, Listbox, ListboxItem, Modal, ModalBody, ModalContent, ModalHeader, ScrollShadow, Spinner, useDisclosure } from "@nextui-org/react"
+import { Button, Divider, Listbox, ListboxItem, Modal, ModalBody, ModalContent, ModalHeader, ScrollShadow, useDisclosure } from "@nextui-org/react"
 import { MagnifyingGlassIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import CustomInput from '@/components/CustomInput';
 import { useState } from 'react';
 import { useLazyQuery } from '@apollo/client';
 import { SEARCH_USERS } from '../graphql/SearchUsers';
-import UserInfoCard from '@/components/UserInfoCard';
 import { useCreateChat } from '../hooks/useCreateChat';
+import Loading from '@/components/Loading';
+import UserInfoCard from '@/components/UserInfoCard';
 
 const NewMessageButton = ({ children, ...props }) => {
 
@@ -63,10 +64,12 @@ const NewMessageButton = ({ children, ...props }) => {
         isOpen={isOpen}
         onClose={handleCloseModal}
         onOpenChange={onOpenChange}
-        backdrop='blur'
         hideCloseButton={true}
         size='xl'
         placement='top'
+        classNames={{
+          base: 'bg-background'
+        }}
       >
         <ModalContent>
           {
@@ -101,18 +104,13 @@ const NewMessageButton = ({ children, ...props }) => {
                   <div className=' flex flex-col gap-2 px-6'>
                     <form onSubmit={handleSubmitSearchUser}>
                       <CustomInput
-                        startContent={<MagnifyingGlassIcon />}
+                        startContent={<MagnifyingGlassIcon className="size-6" />}
                         type="search"
                         placeholder="Search people..."
                         value={userInput}
                         onChange={handleChangeUserInput}
                       />
                     </form>
-
-                    {/* <UsersChip
-                      usersSelected={usersSelected}
-                      setUsersSelected={setUsersSelected}
-                    /> */}
 
                     <Divider />
 
@@ -124,7 +122,7 @@ const NewMessageButton = ({ children, ...props }) => {
                   >
                     {
                       loading ?
-                        <Spinner />
+                        <Loading />
                         : (
                           <Listbox
                             selectionMode='single'
@@ -142,9 +140,7 @@ const NewMessageButton = ({ children, ...props }) => {
                                   textValue={user.slug}
                                 >
                                   <UserInfoCard
-                                    slug={user.slug}
-                                    username={user.username}
-                                    photoURL={user.photoURL}
+                                    user={user}
                                   />
                                 </ListboxItem>
                               ))

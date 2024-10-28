@@ -8,9 +8,9 @@ import FollowingPostList from "./components/FollowingPostList"
 const Home = () => {
 
   return (
-    <div className=" h-fit flex gap-2">
+    <div className=" h-fit flex gap-8">
       {/* //todo: post column */}
-      <div className="w-fit border-r-1 border-divider">
+      <div className="w-fit min-h-screen border-r-1 border-divider">
         <PostForm />
         <Divider />
         <Tabs
@@ -46,7 +46,7 @@ const Home = () => {
       </div>
 
       {/* //todo: recommended users */}
-      <div className="hidden lg:block sticky top-0 flex-1 mx-6 h-fit border-divider rounded-lg">
+      <div className="hidden lg:block sticky top-4 flex-1 mt-4 h-fit border-divider rounded-lg">
         <RecomendedUser />
       </div>
     </div>

@@ -2,7 +2,8 @@ import { Navigate, Outlet } from "react-router-dom"
 import Sidebar from "./Sidebar"
 import NavigationBar from "./NavigationBar"
 import { AuthContext } from "@/contexts/AuthContext"
-import { Spinner } from "@nextui-org/react"
+import Loading from "@/components/Loading"
+import { Toaster } from "react-hot-toast"
 
 
 const MainPageLayout = () => {
@@ -12,14 +13,16 @@ const MainPageLayout = () => {
 
   if (!isAuthenticated) return <Navigate to='/auth' />
 
-  if (loading) return (
-    <div className="w-screen h-screen flex justify-center items-center">
-      <Spinner />
-    </div>
-  )
+  if (loading) return <Loading />
 
   return (
     <div className="w-full h-full max-w-screen-2xl flex flex-col md:flex-row items-center md:items-start mx-auto">
+      <Toaster
+        position="bottom-right"
+        toastOptions={{
+          duration: 2000
+        }}
+      />
       <div className="hidden md:block">
         <Sidebar />
       </div>

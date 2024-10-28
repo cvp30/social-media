@@ -1,12 +1,13 @@
 import { AddMessage } from "@/icons"
 import { useQuery } from "@apollo/client"
-import { ScrollShadow, Spinner } from "@nextui-org/react"
+import { ScrollShadow } from "@nextui-org/react"
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid"
 import { useLocation } from "react-router-dom"
 import CustomInput from "@/components/CustomInput"
 import { ALL_CHATS } from "../../graphql/AllChats"
 import ChatCard from "./ChatCard"
 import NewMessageButton from "../NewMessageButton"
+import Loading from "@/components/Loading"
 
 const ChatList = () => {
 
@@ -29,54 +30,53 @@ const ChatList = () => {
 
       </div>
       {
-        loading ? (
-          <div className="row-span-3 mx-auto place-content-center w-fit">
-            <Spinner />
-          </div>
-        ) : data?.allChats.length ? (
-          <div className="w-full row-span-9 flex flex-col items-center gap-4">
-            <CustomInput
-              startContent={<MagnifyingGlassIcon />}
-              type="search"
-              placeholder="Find chat..."
-              className="px-4"
-            />
+        loading ?
+          <Loading />
+          :
+          data?.allChats.length ? (
+            <div className="w-full row-span-9 flex flex-col items-center gap-4">
+              <CustomInput
+                startContent={<MagnifyingGlassIcon className="size-6" />}
+                type="search"
+                placeholder="Find chat..."
+                className="px-4"
+              />
 
-            <ScrollShadow
-              isEnabled={false}
-              className="w-full flex flex-col gap-1"
-            >
-              {
-                data?.allChats.map(chat => {
-                  return (
-                    <ChatCard
-                      key={chat.id}
-                      chatId={chat.id}
-                      user={chat.user}
-                      lastMessage={chat.lastMessage}
-                      unreadMessages={chat.unreadMessages}
-                    />
-                  )
-                })
-              }
-            </ScrollShadow>
+              <ScrollShadow
+                isEnabled={false}
+                className="w-full flex flex-col gap-1"
+              >
+                {
+                  data?.allChats.map(chat => {
+                    return (
+                      <ChatCard
+                        key={chat.id}
+                        chatId={chat.id}
+                        user={chat.user}
+                        lastMessage={chat.lastMessage}
+                        unreadMessages={chat.unreadMessages}
+                      />
+                    )
+                  })
+                }
+              </ScrollShadow>
 
-          </div>
-        ) : (
-          <div className="w-full row-span-9 pt-8 px-8 flex flex-col items-center gap-4">
-            <h1>Welcome to your inbox</h1>
-            <p className="text-default-500">Write down conversations between you and other people.
-            </p>
+            </div>
+          ) : (
+            <div className="w-full row-span-9 pt-8 px-8 flex flex-col items-center gap-4">
+              <h1>Welcome to your inbox</h1>
+              <p className="text-default-500">Write down conversations between you and other people.
+              </p>
 
-            <NewMessageButton
-              size="lg"
-              radius="sm"
-              className="font-bold w-fit"
-            >
-              New Message
-            </NewMessageButton>
-          </div>
-        )
+              <NewMessageButton
+                size="lg"
+                radius="sm"
+                className="font-bold w-fit"
+              >
+                New Message
+              </NewMessageButton>
+            </div>
+          )
       }
 
 

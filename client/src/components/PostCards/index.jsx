@@ -4,12 +4,12 @@ import GeneralPostCard from "./GeneralPostCard"
 const PostCards = ({ posts }) => {
 
   return (
-    <div className="mx-auto w-fit">
+    <div className="w-full h-fit">
       {
         posts.map(post => (
-          <GeneralPostCard
-            key={post.id}
-          />
+          <div key={post.postId} className="border-b-1 border-divider">
+            <GeneralPostCard postInfo={post} />
+          </div>
         ))
       }
     </div>

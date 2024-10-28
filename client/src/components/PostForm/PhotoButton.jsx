@@ -30,7 +30,7 @@ const PhotoButton = ({ postFormik }) => {
       aria-label="Photo"
       onClick={handleOpenFile}
     >
-      <PhotoIcon className="size-5" />
+      <PhotoIcon className="size-6" />
       <input
         type="file"
         name="image"

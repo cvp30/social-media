@@ -7,8 +7,10 @@ export const POST_DETAILS_FRAGMENT = gql`
     content
     createdAt
     images
+    comments
     likes
     shares
+    bookmarks
     author {
       id
       username

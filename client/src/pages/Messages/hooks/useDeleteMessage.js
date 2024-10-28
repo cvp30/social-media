@@ -5,10 +5,11 @@ import toast from "react-hot-toast"
 export const useDeleteMessage = () => {
 
   const [deleteMessage] = useMutation(DELETE_MESSAGE, {
+    onCompleted: () => {
+      toast.success("Message deleted!")
+    },
     onError: (error) => {
-      toast.error(error.message, {
-        duration: 2000
-      })
+      toast.error(error.message)
     },
   })
 

@@ -40,7 +40,8 @@ export default {
           primary: {
             DEFAULT: '#377DFF',
           },
-          background: '#15202B',
+          // background: '#15202B',
+          background: '#010810',
           foreground: 'white',
           hoverPost: '#1e293b',
         }

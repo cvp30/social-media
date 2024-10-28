@@ -1,13 +1,15 @@
-import { Chip, ScrollShadow, Spinner } from "@nextui-org/react"
+import { Chip, ScrollShadow } from "@nextui-org/react"
 import MessageCard from "./MessageCard"
 import { groupMessagesByDate } from "@/utils/GroupMessagesByDate"
 import { useEffect, useRef } from "react"
 import { ChatRoomContext } from "../../contexts/ChatRoomContext"
+import Loading from "@/components/Loading"
 
 const ChatRoomBody = () => {
 
   const containerRef = useRef(null)
   const { chat, loading } = ChatRoomContext()
+
 
   //ALL KEYS ARE DATES 
   const formattedMessages = groupMessagesByDate(chat?.messages || [])
@@ -23,8 +25,8 @@ const ChatRoomBody = () => {
   }
 
   if (loading) return (
-    <div className="row-span-5 flex justify-center items-center">
-      <Spinner />
+    <div className="row-span-5">
+      <Loading />
     </div>
   )
 

@@ -24,7 +24,9 @@ const LoginForm = () => {
       navigate('/')
     },
 
-    onError: error => toast.error(error.message),
+    onError: error => {
+      toast.error(error.message)
+    },
 
     update: (cache, { data }) => {
       const { token, userInfo } = data.loginUser
@@ -68,18 +70,18 @@ const LoginForm = () => {
         placeholder='Email'
         type='email'
         name='email'
-        startContent={<EnvelopeIcon />}
+        startContent={<EnvelopeIcon className="size-6" />}
         onBlur={loginFormik.handleBlur}
         value={loginFormik.values.email}
         onChange={loginFormik.handleChange}
         isInvalid={loginFormik.touched.email && Boolean(loginFormik.errors.email)}
-        errorMessage={loginFormik.touched?.email ? <ErrorMessage message={loginFormik.errors.email} /> : <></>}
+      // errorMessage={loginFormik.touched?.email ? <ErrorMessage message={loginFormik.errors.email} /> : <></>}
       />
       <CustomInput
         type={isVisible ? 'text' : 'password'}
         name='password'
         placeholder='Password'
-        startContent={<LockClosedIcon />}
+        startContent={<LockClosedIcon className="size-6" />}
         endContent={
           <div className="cursor-pointer" onClick={handlePasswordVisibility} >
             {

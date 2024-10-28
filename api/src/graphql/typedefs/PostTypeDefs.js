@@ -17,12 +17,24 @@ export const PostTypeDefs = `#graphql
     content: String
     images: [String]!
     createdAt: Date!
+    comments: [ID!]!
     likes: [ID!]!
     shares: [ID!]!
+    bookmarks: [ID!]!
+  }
+
+  type PaginatedPosts {
+    posts: [Post!]!
+    page: Int!
+    hasMore: Boolean!
+    lastDate: Date
   }
 
   extend type Query {
-    allPosts: [Post!]!
+    allPosts(
+      nPage: Int
+      before: String
+    ): PaginatedPosts!
     allFollowingUserPost: [Post!]!
     post(
       postId: ID!
@@ -30,8 +42,14 @@ export const PostTypeDefs = `#graphql
     userPosts(
       slug: String!
     ): [Post!]!
+    userLikes(
+      slug: String!
+    ): [Post!]!
+    userBookmarks(
+      slug: String!
+    ): [Post!]!
     comments(
-      parentPostId: ID!
+      postId: ID!
     ): [Post!]!
   }
 
@@ -43,6 +61,22 @@ export const PostTypeDefs = `#graphql
     ): Post!
 
     deletePost(
+      postId: ID!
+    ): ID!
+
+    sharePost(
+      postId: ID!
+    ): ID!
+
+    unsharePost(
+      postId: ID!
+    ): ID!
+
+    bookmarkPost(
+      postId: ID!
+    ): ID!
+
+    unbookmarkPost(
       postId: ID!
     ): ID!
 

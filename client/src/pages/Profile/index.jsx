@@ -1,18 +1,19 @@
-import { NavLink, Outlet } from "react-router-dom"
+import { NavLink, Outlet, useParams } from "react-router-dom"
 import RecomendedUser from "@/components/RecomendedUser"
 import ProfileInfo from "./components/ProfileInfo"
+import { ProfileInfoProvider } from "./contexts/ProfileContext"
 
 const Profile = () => {
-
-  const items = ['posts', 'replies', 'bookmarks', 'likes']
+  const { slug } = useParams()
+  const items = ['posts', 'likes', 'bookmarks']
 
   return (
-    <section className="h-fit flex gap-2">
-      <div className="sm:w-148 xl:w-164 pt-4 border-r-1 border-divider">
-        {/* <ProfileInfoProvider slug={slug}> */}
+    <section className="h-fit flex gap-8">
+      <div className="sm:w-148 xl:w-164 min-h-screen pt-4 border-r-1 border-divider">
+        <ProfileInfoProvider slug={slug}>
         <ProfileInfo />
 
-        <div className="w-full flex justify-between mt-4">
+        <div className="w-full flex justify-between mt-4 border-y border-divider">
           {
             items.map(item => {
 
@@ -32,10 +33,10 @@ const Profile = () => {
 
         <Outlet />
 
-        {/* </ProfileInfoProvider> */}
+        </ProfileInfoProvider>
       </div>
 
-      <div className="hidden lg:block sticky top-0 flex-1 mx-6 h-fit border-divider rounded-lg">
+      <div className="hidden lg:block sticky flex-1 top-4 mt-4 h-fit border-divider rounded-lg">
         <RecomendedUser />
       </div>
 

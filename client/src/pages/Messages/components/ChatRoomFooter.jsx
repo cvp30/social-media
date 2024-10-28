@@ -4,6 +4,7 @@ import { Button } from "@nextui-org/react"
 import { useState } from "react"
 import { ChatRoomContext } from "../contexts/ChatRoomContext"
 import { useCreateMessage } from "../hooks/useCreateMessage"
+import EmojiButton from "@/components/EmojiButton"
 
 const ChatRoomFooter = () => {
 
@@ -14,6 +15,10 @@ const ChatRoomFooter = () => {
   const isDisabled = loading || !message.trim().length
 
   const handleChangeMessage = (e) => setMessage(e.target.value)
+
+  const handleAddEmoji = (emoji) => {
+    setMessage(message + emoji.native)
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -32,25 +37,27 @@ const ChatRoomFooter = () => {
       onSubmit={handleSubmit}
       className="px-4 flex items-center gap-2 row-span-1 border-t-1 border-divider"
     >
+      {/* <Button
+        isIconOnly
+        color="primary"
+        variant="light"
+        radius="full"
+        size="sm"
+      >
+        <PaperClipIcon className="size-5" />
+      </Button> */}
       <CustomInput
         name='message'
         placeholder='input message...'
         autoComplete="off"
         value={message}
         onChange={handleChangeMessage}
+        endContent={<EmojiButton handleAddEmoji={handleAddEmoji} />}
       />
-      <Button
-        isIconOnly
-        color="primary"
-        variant="light"
-        radius="full"
-      >
-        <PaperClipIcon className="size-5" />
-      </Button>
 
       <Button
-        type="submit"
         isIconOnly
+        type="submit"
         color="primary"
         variant="light"
         radius="sm"

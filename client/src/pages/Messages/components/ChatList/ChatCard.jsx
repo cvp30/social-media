@@ -1,7 +1,6 @@
 import { Avatar, Badge } from '@nextui-org/react';
 import PropTypes from 'prop-types';
 import { NavLink } from "react-router-dom"
-import defaultUser from '@/assets/defaultUser.jpg'
 import { formatChatDate } from '@/utils/FormatChatDate';
 import { useMessageAdded } from '../../hooks/useMessageAdded';
 import { AuthContext } from '@/contexts/AuthContext';
@@ -26,14 +25,16 @@ const ChatCard = ({ chatId, user, lastMessage, unreadMessages }) => {
         unreadMessages ? (
           <Badge content={unreadMessages} size='lg' color="danger" shape="circle">
             <Avatar
-              src={user.photoURL || defaultUser}
+              src={user.photoURL}
+              showFallback
               size='lg'
               alt="userImg"
             />
           </Badge>
         ) : (
           <Avatar
-            src={user.photoURL || defaultUser}
+            src={user.photoURL}
+            showFallback
             size='lg'
             alt="userImg"
           />

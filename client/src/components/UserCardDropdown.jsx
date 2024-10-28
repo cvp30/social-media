@@ -1,6 +1,5 @@
 import { Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, User } from "@nextui-org/react"
 import { AuthContext } from '@/contexts/AuthContext';
-// import { useTheme } from "@/hooks/useTheme";
 import { useApolloClient } from "@apollo/client";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeftStartOnRectangleIcon, MoonIcon, SunIcon } from "@heroicons/react/24/solid";
@@ -21,10 +20,9 @@ const UserCardDropdown = () => {
 
   return (
     <Dropdown
-      showArrow
       placement="bottom-start"
       classNames={{
-        content: 'bg-background shadow-medium'
+        content: 'bg-background dropdownOptions',
       }}
     >
       <DropdownTrigger>
@@ -33,9 +31,9 @@ const UserCardDropdown = () => {
           name={currUser.username}
           description={`@${currUser.slug}`}
           classNames={{
-            base: 'w-fit xl:w-full mx-auto flex justify-start gap-2',
-            name: 'text-start text-base line-clamp-1',
-            description: 'text-sm text-default-500 line-clamp-1',
+            base: 'w-fit p-2 hover:bg-hoverPost xl:w-full mx-auto flex justify-start gap-2',
+            name: 'text-start text-base line-clamp-1 font-semibold',
+            description: 'text-base text-default-500 line-clamp-1',
             wrapper: 'hidden xl:flex flex-col flex-1 overflow-hidden',
           }}
           avatarProps={{

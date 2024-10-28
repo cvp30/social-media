@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+
+
 @layer components {
 
   html,
@@ -11,11 +13,14 @@
   }
 
   html.dark {
-    background-color: #15202b;
-    background-image: linear-gradient(90deg, #15202b 0%, #000000 100%);
+    /* background-color: #010810; */
+    @apply bg-background
+    /* background-image: linear-gradient(90deg, #15202b 0%, #000000 100%); */
     /* linear-gradient(251deg, #0d1210 0%, hsla(58.99, 100%, 23.33%, 0.02837051571513438) 65%), linear-gradient(295deg, #15202b 99%, #5acab1 100%); */
-    background-attachment: fixed;
+    /* background-attachment: fixed; */
   }
+
+
 
 
 }
@@ -32,12 +37,19 @@
   }
 
   h3 {
-    @apply text-xl;
-    @apply font-medium;
+    @apply text-2xl;
+    @apply font-semibold;
   }
 
   h4 {
     @apply text-lg;
     @apply font-normal;
+  }
+}
+
+@layer utilities {
+
+  .dropdownOptions {
+    box-shadow: hsla(var(--nextui-default-400)) 0px 0px 15px, hsla(var(--nextui-default-400)) 0px 0px 3px 1px;
   }
 }

@@ -1,32 +1,43 @@
-import GeneralPostCard from "@/components/PostCards/GeneralPostCard"
-import { ALL_POSTS } from "@/graphql/AllPosts"
-import { useQuery } from "@apollo/client"
-import { Divider, Spinner } from "@nextui-org/react"
+import Loading from "@/components/Loading"
+import PostCards from "@/components/PostCards"
+import { useAllPosts } from "../hooks/useAllPosts"
+import { useMorePosts } from "../hooks/useMorePosts"
 
 
 const PostList = () => {
 
-  const { loading, data } = useQuery(ALL_POSTS)
+  const { loading, posts, page, hasMore, lastDate } = useAllPosts()
+  const { loadMorePosts, loadingPosts } = useMorePosts()
 
-  if (loading) return <Spinner />
+  if (loading) return <Loading />
 
-  return (
-    <div className="mx-auto w-fit">
-      {
-        data?.allPosts.map(post => (
-          <div key={post.postId}>
-            <GeneralPostCard
-              postId={post.postId}
-              author={post.author}
-              content={post.content}
-              images={post.images}
-              createdAt={post.createdAt}
-            />
-            <Divider />
-          </div>
-        ))
+  const handleLoadPosts = async () => {
+
+    await loadMorePosts({
+      variables: {
+        nPage: page,
+        before: lastDate
       }
-    </div>
+    })
+  }
+  return (
+    <>
+      <PostCards posts={posts} />
+
+      {loadingPosts ? <Loading /> : <></>}
+
+      {
+        hasMore ? (
+          <p
+            className="w-fit mx-auto my-6 cursor-pointer font-black underline italic"
+            onClick={handleLoadPosts}
+          >
+            Show more
+          </p>
+        )
+          : <></>
+      }
+    </>
   )
 }
 

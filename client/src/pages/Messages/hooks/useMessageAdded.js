@@ -3,7 +3,7 @@ import { MESSAGE_ADDED } from "../graphql/subscriptions/MessageAdded"
 import { AuthContext } from "@/contexts/AuthContext"
 import { CHAT_INFO } from "../graphql/ChatInfo"
 import { MESSAGE_FRAGMENT } from "../graphql/fragments/MessageFragment"
-import { ALL_CHATS } from "../graphql/AllChats"
+import { CHAT_FRAGMENT } from "../graphql/fragments/ChatFragment"
 
 
 export const useMessageAdded = (chatId) => {
@@ -41,32 +41,27 @@ export const useMessageAdded = (chatId) => {
         }
 
         // UPDATE CHAT LIST -------------------------------
-        const { allChats } = cache.readQuery({
-          query: ALL_CHATS,
+        const existingChat = cache.readFragment({
+          id: cache.identify({ id: chatId, __typename: 'GeneralChat' }),
+          fragment: CHAT_FRAGMENT
         })
 
-        cache.writeQuery({
-          query: ALL_CHATS,
+        cache.writeFragment({
+          id: cache.identify({ id: chatId, __typename: 'GeneralChat' }),
+          fragment: CHAT_FRAGMENT,
           data: {
-            allChats: allChats.map(chatItem => {
-              return chatItem.id === chatId ? {
-                ...chatItem,
-                lastMessage: {
-                  id: messageAdded.id,
-                  content: messageAdded.content,
-                  sender: {
-                    id: messageAdded.sender.id
-                  },
-                  timestamp: messageAdded.timestamp,
-                },
-                unreadMessages: chatItem.unreadMessages + 1,
-              }
-                :
-                chatItem
-            })
+            ...existingChat,
+            lastMessage: {
+              id: messageAdded.id,
+              content: messageAdded.content,
+              sender: {
+                id: messageAdded.sender.id
+              },
+              timestamp: messageAdded.timestamp,
+            },
+            unreadMessages: existingChat.unreadMessages + 1,
           }
         })
-
       }
     },
   })

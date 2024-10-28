@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import { AuthContext } from "@/contexts/AuthContext"
 import { Avatar, Button, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger, Tooltip } from "@nextui-org/react"
-import defaultUser from '@/assets/defaultUser.jpg'
 import dayjs from 'dayjs';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { useDeleteMessage } from '../../hooks/useDeleteMessage';
@@ -27,7 +26,8 @@ const MessageCard = ({ id, content, sender, isRead, timestamp }) => {
     <div className={`${isMyMessage ? 'flex-row-reverse' : ''} w-full flex gap-1 group`}>
       {/* IMAGE */}
       <Avatar
-        src={`${sender.photoURL || defaultUser}`}
+        src={`${sender.photoURL}`}
+        showFallback
         size='sm'
         alt='userImg'
       />
@@ -54,11 +54,10 @@ const MessageCard = ({ id, content, sender, isRead, timestamp }) => {
       <div className='w-fit h-full flex items-center'>
 
         <Dropdown
-          showArrow
           placement="bottom-start"
           radius='sm'
           classNames={{
-            content: 'bg-background shadow-medium'
+            content: 'bg-background dropdownOptions'
           }}
         >
           <DropdownTrigger>

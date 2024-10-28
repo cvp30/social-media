@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2"
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -53,5 +54,7 @@ userSchema.virtual('timestamp').get(function () {
 
   return new Date(timestamp)
 });
+
+userSchema.plugin(mongoosePaginate);
 
 export default mongoose.model("User", userSchema)

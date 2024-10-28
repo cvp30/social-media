@@ -1,7 +1,5 @@
 import { Avatar, Chip } from '@nextui-org/react';
 import PropTypes from 'prop-types';
-import defaultUser from '@/assets/defaultUser.jpg'
-
 const UsersChip = ({ usersSelected, setUsersSelected }) => {
 
   const handleRemoveChip = (userIdToDelete) => {
@@ -24,7 +22,8 @@ const UsersChip = ({ usersSelected, setUsersSelected }) => {
             onClose={() => handleRemoveChip(user.id)}
             avatar={
               <Avatar
-                src={`${user.photoURL || defaultUser}`}
+                src={`${user.photoURL}`}
+                showFallback
               />
             }
             radius='sm'

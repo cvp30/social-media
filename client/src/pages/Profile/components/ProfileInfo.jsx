@@ -1,119 +1,104 @@
-import { AuthContext } from "@/contexts/AuthContext"
-import { useQuery } from "@apollo/client"
-import { useParams } from "react-router-dom"
-import { GET_DATA_PROFILE } from "../graphql/GetDataProfile"
-import { Avatar, Button, Link, Spinner } from "@nextui-org/react"
+import { Avatar, Image, Link } from "@nextui-org/react"
 import { LinkIcon, MapPinIcon } from "@heroicons/react/24/outline"
-// import { LinkIcon, MapPinIcon } from "@heroicons/react/24/solid"
+import Loading from "@/components/Loading"
+import UpdateUserForm from "./UpdateUserForm"
+import { ProfileContext } from "../contexts/ProfileContext"
 
 const ProfileInfo = () => {
 
-  const { slug } = useParams()
-  const { currUser } = AuthContext()
+  const { profile, loading, isCurrentUser } = ProfileContext()
 
-  const isCurrentUser = currUser.slug === slug
-
-  const { data, loading } = useQuery(GET_DATA_PROFILE, {
-    variables: { slug },
-    skip: isCurrentUser
-  })
-
-  if (loading) return <Spinner />
-
-  const profileData = isCurrentUser ? currUser : data?.user
+  if (loading) return (
+    <div className="w-full aspect-[3/2]">
+      <Loading />
+    </div>
+  )
 
   return (
     <div className="w-full h-fit">
-      <div
-        className={`${profileData.coverPhoto ? 'transparent' : 'bg-default-500'} w-full aspect-[3/1] relative bg-cover bg-center `}
-        style={{
-          backgroundImage: profileData.coverPhoto ? `url(${profileData.coverPhoto})` : 'none',
-        }}
-      >
+      <div className={`${profile.coverPhoto ? '' : 'bg-default-500'} w-full aspect-[3/1] relative`}>
+        {
+          profile.coverPhoto && (
+            <Image
+              removeWrapper
+              src={profile.coverPhoto}
+              className="w-full object-cover object-center aspect-[3/1]"
+              radius="none"
+            />
+          )
+        }
         <Avatar
           isBordered
-          color="primary"
-          src={profileData.photoURL}
-          className="w-28 h-28 absolute -bottom-10 left-0 ml-4"
+          src={profile.photoURL}
+          color={`${profile.photoURL ? 'primary' : ''}`}
+          showFallback
+          className="w-28 h-28 absolute -bottom-10 left-0 ml-4 z-10"
         />
       </div>
 
       <div className="w-full h-fit px-4 flex flex-col gap-2 pt-2">
-        {
-          !isCurrentUser && (
-            <div className="w-full text-right">
-              <Button
-                variant="ghost"
-                color="primary"
-                size="lg"
-              >
-                Edit profile
-              </Button>
-            </div>
-          )
-        }
+        <div className="w-full h-14 text-right">
+          {
+            isCurrentUser && <UpdateUserForm />
+          }
+        </div>
 
-        <div className={`${!isCurrentUser ? '' : 'mt-14'} w-full`}>
-          <h2 className="w-full line-clamp-1">{profileData.username}</h2>
-          <p className="text-default-500">@{profileData.slug}</p>
+        <div className='w-full'>
+          <h2 className="w-full line-clamp-1">{profile.username}</h2>
+          <p className="text-default-500">@{profile.slug}</p>
         </div>
 
         <div className="w-full">
-          <p>{profileData.bio}</p>
+          <p>{profile.bio}</p>
 
           <div className="w-full flex flex-wrap gap-x-3 text-default-500">
             {
-              profileData.location &&
+              profile.location &&
               <Link
                 isExternal
-                href={profileData.location}
+                href={profile.location}
                 className="inline-flex"
               >
                 <MapPinIcon className="size-5" />
-                {profileData.location}
+                {profile.location}
               </Link>
             }
             {
-              profileData.linkedin &&
+              profile.linkedin &&
               <Link
                 isExternal
-                href={profileData.linkedin}
+                href={`https://x.com/${profile.linkedin}`}
                 className="inline-flex"
               >
                 <LinkIcon className="size-5" />
-                {profileData.linkedin}
+                {profile.linkedin}
               </Link>
             }
             {
-              profileData.github &&
+              profile.github &&
               <Link
                 isExternal
-                href={profileData.github}
+                href={`https://github.com/${profile.github}`}
                 className="inline-flex"
               >
                 <LinkIcon className="size-5" />
-                {profileData.github}
+                {profile.github}
               </Link>
             }
             {
-              profileData.portfolio &&
+              profile.portfolio &&
               <Link
                 isExternal
-                href={profileData.portfolio}
+                href={profile.portfolio}
                 className="inline-flex"
               >
                 <LinkIcon className="size-5" />
-                {profileData.portfolio}
+                {profile.portfolio}
               </Link>
             }
           </div>
         </div>
-
-
-
       </div>
-
-
     </div>
   )
 }

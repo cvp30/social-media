@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2"
 
 const postSchema = new mongoose.Schema({
   parentPostId: {
@@ -27,7 +28,17 @@ const postSchema = new mongoose.Schema({
   shares: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
-  }]
-})
+  }],
+  bookmarks: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  }],
+  comments: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Post",
+  }],
+});
 
-export default mongoose.model("Post", postSchema)
+postSchema.plugin(mongoosePaginate);
+
+export default mongoose.model("Post", postSchema);

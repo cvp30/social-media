@@ -8,7 +8,6 @@ export const useMessageRemoved = (chatId) => {
 
   useSubscription(MESSAGE_REMOVED, {
     variables: { chatId },
-
     onData: ({ client: { cache }, data }) => {
 
       // UPDATE MESSAGES CHAT-------------------------------------------

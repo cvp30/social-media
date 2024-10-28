@@ -1,7 +1,6 @@
 import { ArrowTopRightOnSquareIcon, TrashIcon } from "@heroicons/react/24/solid"
 import { Avatar, Button, Divider, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, useDisclosure } from "@nextui-org/react"
 import { ChatRoomContext } from '../../contexts/ChatRoomContext';
-import defaultUser from '@/assets/defaultUser.jpg'
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { useNavigate } from 'react-router-dom';
 import { useDeleteChat } from "../../hooks/useDeleteChat";
@@ -38,16 +37,25 @@ const ChatSettings = () => {
       >
         <InformationCircleIcon className="size-7" />
       </Button>
-      <Modal isOpen={isOpen} onOpenChange={onOpenChange} isDismissable={false} isKeyboardDismissDisabled={true}>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        isDismissable={false}
+        isKeyboardDismissDisabled={true}
+        classNames={{
+          base: 'bg-background'
+        }}
+      >
         <ModalContent>
           <>
             <ModalHeader className='flex flex-col items-center gap-2'>
               <Avatar
-                src={user.photoURL || defaultUser}
+                src={user.photoURL}
+                showFallback
                 alt="userImg"
                 className='w-20 h-20 mx-auto'
-              >
-              </Avatar>
+              />
+
               <div className='w-full flex flex-col items-center'>
                 <h2 className='line-clamp-1 text-center'>{user.username}</h2>
                 <p className='text-default-500'>@{user.slug}</p>

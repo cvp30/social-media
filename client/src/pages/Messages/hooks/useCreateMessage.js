@@ -2,8 +2,8 @@ import { useMutation } from "@apollo/client"
 import { SEND_MESSAGE } from "../graphql/SendMessage"
 import { CHAT_INFO } from "../graphql/ChatInfo"
 import { AuthContext } from "@/contexts/AuthContext"
-import { ALL_CHATS } from "../graphql/AllChats"
 import { MESSAGE_FRAGMENT } from "../graphql/fragments/MessageFragment"
+import { CHAT_FRAGMENT } from "../graphql/fragments/ChatFragment"
 
 
 export const useCreateMessage = (chatId, message) => {
@@ -12,6 +12,7 @@ export const useCreateMessage = (chatId, message) => {
 
   const [sendMessage, { loading }] = useMutation(SEND_MESSAGE, {
     update: (cache, { data }) => {
+
       const { chat } = cache.readQuery({
         query: CHAT_INFO,
         variables: { chatId }
@@ -31,35 +32,27 @@ export const useCreateMessage = (chatId, message) => {
       })
 
       // ---------------------------
-      const { allChats } = cache.readQuery({
-        query: ALL_CHATS,
+      const existingChat = cache.readFragment({
+        id: cache.identify({ id: chatId, __typename: 'GeneralChat' }),
+        fragment: CHAT_FRAGMENT
       })
 
-      cache.writeQuery({
-        query: ALL_CHATS,
+      cache.writeFragment({
+        id: cache.identify({ id: chatId, __typename: 'GeneralChat' }),
+        fragment: CHAT_FRAGMENT,
         data: {
-          allChats: allChats.map(chat => {
-            return chat.id === chatId ? {
-              ...chat,
-              lastMessage: {
-                id: data.newMessage.id,
-                content: data.newMessage.content,
-                sender: {
-                  id: data.newMessage.sender.id
-                },
-                timestamp: data.newMessage.timestamp,
-              },
-              unreadMessages: 0,
-            }
-              :
-              chat
-          })
+          ...existingChat,
+          lastMessage: {
+            id: data.newMessage.id,
+            content: data.newMessage.content,
+            sender: {
+              id: data.newMessage.sender.id
+            },
+            timestamp: data.newMessage.timestamp,
+          },
+          unreadMessages: 0,
         }
       })
-
-
-
-
     },
     optimisticResponse: {
       newMessage: {

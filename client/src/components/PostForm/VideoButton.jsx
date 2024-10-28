@@ -11,7 +11,7 @@ const VideoButton = () => {
       color="primary"
       aria-label="Video"
     >
-      <VideoCameraIcon className="size-5" />
+      <VideoCameraIcon className="size-6" />
     </Button>
   )
 }

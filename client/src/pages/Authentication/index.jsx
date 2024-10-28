@@ -54,7 +54,9 @@ const Authentication = () => {
           </Modal>
         </div>
       </div>
-      <Toaster />
+      <Toaster
+        position="bottom-right"
+      />
     </div>
   )
 }

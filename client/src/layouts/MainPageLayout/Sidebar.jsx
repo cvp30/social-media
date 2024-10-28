@@ -18,7 +18,7 @@ const Sidebar = () => {
         <Logo />
 
         {/* ITEMS */}
-        <div className="w-full h-fit mt-8 flex flex-col items-center justify-between gap-2 px-4">
+        <div className="w-full h-fit mt-16 flex flex-col items-center justify-between gap-4 px-4">
           {
             menuItems.map((item) => {
               const path = item.name === 'home' ?
@@ -29,7 +29,7 @@ const Sidebar = () => {
                 <NavLink
                   key={item.name}
                   to={`/${path}`}
-                  className={({ isActive }) => `${isActive ? 'bg-hoverPost' : ''} w-fit xl:w-full h-fit p-3 hover:bg-hoverPost rounded-small flex items-center gap-4 capitalize`}
+                  className={({ isActive }) => `${isActive ? 'bg-hoverPost' : ''} w-fit xl:w-full h-fit p-3 hover:bg-hoverPost duration-300 rounded-small flex items-center gap-4 capitalize`}
                 >
                   {
                     ({ isActive }) => (

@@ -1,6 +1,5 @@
 import { Outlet, useLocation } from "react-router-dom"
 import NewMessageButton from "./components/NewMessageButton"
-import { Toaster } from "react-hot-toast"
 import ChatList from "./components/ChatList"
 
 
@@ -10,7 +9,6 @@ const Messages = () => {
 
   return (
     <div className="w-full md:h-screen h-[calc(100vh-5rem)] flex box-border">
-      <Toaster />
       <ChatList />
 
       <div className="flex-1 grid grid-cols-1 grid-rows-7 border-divider border-r-1">

@@ -87,7 +87,7 @@ export const FollowshipResolvers = {
           following: followUserId
         })
 
-        return userFollowingExist
+        return userFollowingExist._id
 
       } catch (error) {
         throw new Error(error.message)
@@ -99,7 +99,7 @@ export const FollowshipResolvers = {
       try {
         const userId = currentUser.id
 
-        const removeFollow = await Followship.findOneAndRemove({
+        const removeFollow = await Followship.findOneAndDelete({
           $and: [
             { follower: userId },
             { following: unfollowUserId }
@@ -110,7 +110,7 @@ export const FollowshipResolvers = {
 
         if (!removeFollow) throw new Error("You already unfollow this user!")
 
-        return removeFollow.following
+        return removeFollow.following._id
 
       } catch (error) {
         throw new Error(error.message)

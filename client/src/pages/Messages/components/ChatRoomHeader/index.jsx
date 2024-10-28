@@ -1,16 +1,18 @@
 import { Avatar, Button } from "@nextui-org/react"
 import { useNavigate } from "react-router-dom"
 import { ArrowLeftIcon } from "@heroicons/react/24/solid"
-import defaultUser from '@/assets/defaultUser.jpg'
 import { ChatRoomContext } from "../../contexts/ChatRoomContext"
 import ChatSettings from "./ChatSettings"
+import Loading from "@/components/Loading"
 
 const ChatRoomHeader = () => {
 
   const navigate = useNavigate()
   const { chat, loading } = ChatRoomContext()
 
-  if (loading) return <div className="row-span-1 border-b-1 border-divider"></div>
+  if (loading) return <div className="row-span-1 border-b-1 border-divider">
+    <Loading />
+  </div>
 
 
   const handleReturn = () => {
@@ -31,7 +33,8 @@ const ChatRoomHeader = () => {
           <ArrowLeftIcon className="size-7" />
         </Button>
         <Avatar
-          src={chat.user.photoURL || defaultUser}
+          src={chat.user.photoURL}
+          showFallback
           size='lg'
           alt="userImg"
         />

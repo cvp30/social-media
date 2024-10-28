@@ -3,6 +3,7 @@ import User from "../../models/User.js"
 import Followship from "../../models/Followship.js";
 import { generateToken } from "../../utils/generateToken.js";
 import { generateSlug } from "../../utils/generateSlug.js"
+import mongoose from "mongoose";
 
 export const UserResolvers = {
   Query: {
@@ -50,9 +51,10 @@ export const UserResolvers = {
         throw new Error(error.message)
       }
     },
-    communityUsers: async (_, __, { currentUser }) => {
+    communityUsers: async (_, { user, nPage, before }, { currentUser }) => {
       if (!currentUser) throw new Error('Not Authenticated')
       try {
+        const USERS_PER_PAGE = 20
         const userId = currentUser.id
 
         const followingQuery = await Followship.find({
@@ -60,11 +62,49 @@ export const UserResolvers = {
         })
           .select('following')
 
+        // .populate({
+        //   path: 'follower',
+        //   model: 'User',
+        //   select: '_id slug username'
+        // })
+
         const followingList = followingQuery.map(user => user.following)
 
-        return await User.find({
-          _id: { $nin: [...followingList, userId] }
-        })
+        const query = {
+          _id: { $nin: [...followingList, userId] },
+        }
+
+        if (user) query.$or = [
+          {
+            username: { $regex: user, $options: 'i' }
+          },
+          {
+            slug: { $regex: user, $options: 'i' }
+          }
+        ]
+
+        if (before) query.timestamp = { $lt: new Date(before) }
+
+        const users = await User.paginate(
+          query,
+          {
+            sort: { timestamp: -1 },
+            limit: USERS_PER_PAGE,
+            page: nPage || 1
+          }
+        )
+
+        const { docs, page, hasNextPage } = users
+
+        const lastDate = docs.length > 0 ? docs[docs.length - 1].timestamp : null
+
+        return {
+          users: docs,
+          page,
+          hasMore: hasNextPage,
+          lastDate,
+
+        }
       } catch (error) {
         throw new Error(error.message)
       }
@@ -91,17 +131,25 @@ export const UserResolvers = {
       }
 
     },
-    randomUser: async (_, __, { currentUser }) => {
+    randomUsers: async (_, __, { currentUser }) => {
       if (!currentUser) throw new Error('Not Authenticated')
       try {
-        const randomUsersSize = 1
+        const randomUsersSize = 3
         const userId = currentUser.id
+
+        const followedUsers = await Followship.find({
+          follower: userId
+        })
+          .select('following')
+
+        const followedUserIds = followedUsers.map(user => user.following)
 
         const randomUsers = await User.aggregate([
           {
             $match: {
               _id: {
-                $ne: userId
+                $ne: new mongoose.Types.ObjectId(userId),
+                $nin: followedUserIds
               }
             }
           },
@@ -119,7 +167,7 @@ export const UserResolvers = {
             id: _id,
             ...dataUser
           }
-        })[0]
+        })
 
       } catch (error) {
         throw new Error(error.message)
@@ -194,11 +242,11 @@ export const UserResolvers = {
       }
 
     },
-    updateUser: async (_, { userInputData }) => {
-      if (!context.currentUser) throw new Error('Not Authenticated')
+    updateUser: async (_, { userInputData }, { currentUser }) => {
+      if (!currentUser) throw new Error('Not Authenticated')
 
       try {
-        const userId = context.currentUser.id
+        const userId = currentUser.id
 
         return await User.findOneAndUpdate(
           {

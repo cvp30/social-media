@@ -14,6 +14,7 @@ import Posts from "@/pages/Profile/pages/Posts";
 import Replies from "@/pages/Profile/pages/Replies";
 import Bookmarks from "@/pages/Profile/pages/Bookmarks";
 import Likes from "@/pages/Profile/pages/Likes";
+import { PostContextProvider } from "@/pages/Post/contexts/PostContext";
 
 export const router = createBrowserRouter([
   {
@@ -34,7 +35,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'post/:postId',
-        element: <Post />,
+        element: <PostContextProvider><Post /></PostContextProvider>,
       },
       {
         path: 'messages',

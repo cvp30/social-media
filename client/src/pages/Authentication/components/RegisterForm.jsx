@@ -15,11 +15,9 @@ const RegisterForm = () => {
 
   const navigate = useNavigate()
   const [isVisible, setIsVisible] = useState(false)
-  // const { setIsAuthenticated } = AuthContext()
 
   const [registerUser, { loading }] = useMutation(REGISTER_USER, {
     onCompleted: () => {
-      // setIsAuthenticated(true)
       navigate('/')
 
     },
@@ -80,18 +78,18 @@ const RegisterForm = () => {
                 <CustomInput
                   placeholder='Email'
                   type='email'
-                  startContent={<EnvelopeIcon />}
+                  startContent={<EnvelopeIcon className="size-6" />}
                 />
                 <CustomInput
                   type='text'
                   placeholder='Username'
-                  startContent={<UserIcon />}
+                  startContent={<UserIcon className="size-6" />}
                 />
 
                 <CustomInput
                   type={isVisible ? 'text' : 'password'}
                   placeholder='Password'
-                  startContent={<LockClosedIcon />}
+                  startContent={<LockClosedIcon className="size-6" />}
                   endContent={
                     <div className="cursor-pointer" onClick={handlePasswordVisibility} >
                       {

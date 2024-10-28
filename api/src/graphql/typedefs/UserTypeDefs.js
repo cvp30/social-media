@@ -1,6 +1,6 @@
 
 export const UserTypeDefs = `#graphql
-
+  scalar Date
   interface UserBasicData{
     id: ID!
     photoURL: String
@@ -21,6 +21,7 @@ export const UserTypeDefs = `#graphql
     linkedin: String
     portfolio: String
     location: String
+    timestamp: Date
   }
 
   type UserInfo {
@@ -39,6 +40,7 @@ export const UserTypeDefs = `#graphql
   }
 
 
+
   input UserInputData {
     username: String
     github: String
@@ -50,6 +52,13 @@ export const UserTypeDefs = `#graphql
     location: String
   }
 
+  type PaginatedCommunityUsers {
+    users: [User!]!
+    page: Int!
+    hasMore: Boolean!
+    lastDate: Date
+  }
+
   extend type Query {
     user(
       slug: String!
@@ -59,8 +68,12 @@ export const UserTypeDefs = `#graphql
     searchUsers(
       user: String!
     ): [User!]!
-    communityUsers: [User!]!
-    randomUser: User!
+    communityUsers(
+      user: String
+      nPage: Int
+      before: String
+    ): PaginatedCommunityUsers!
+    randomUsers: [User!]!
   }
 
   extend type Mutation {
@@ -76,7 +89,7 @@ export const UserTypeDefs = `#graphql
     ): LoginResponse!
 
     updateUser(
-      userInputData: UserInputData
+      userInputData: UserInputData!
     ): User!
   }
 `
