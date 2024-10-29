@@ -12,7 +12,7 @@ import { getMainDefinition } from '@apollo/client/utilities'
 
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:5000/graphql',
+  uri: 'https://social-media-api-cy7n.onrender.com/graphql',
 })
 
 const authLink = setContext((_, { headers }) => {
@@ -28,7 +28,7 @@ const authLink = setContext((_, { headers }) => {
 })
 
 const wsLink = new GraphQLWsLink(createClient({
-  url: 'ws://localhost:5000/graphql',
+  url: 'ws://social-media-api-cy7n.onrender.com/graphql',
 }))
 
 const splitLink = split(
