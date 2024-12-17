@@ -1,6 +1,6 @@
-![Social Media](socialMedia.avif)
-
 # 🌐 [Social Media App](https://social-media-snapshare.vercel.app)
+
+![Social Media](socialMedia.avif)
 
 ## Descubre, Conéctate y Comparte
 
